@@ -294,6 +294,13 @@ body.gc-locked { overflow: hidden; }
 .gc-seo { text-align: center; color: var(--ink-muted); font-size: 12.5px; line-height: 1.7; margin: 0 0 var(--space-4); }
 .gc-seo b { color: var(--gold-500); font-family: var(--font-figure); font-size: 15px; font-weight: 700; }
 
+/* ---------- عدّاد الزيارات ---------- */
+.gc-visits { text-align: center; color: var(--ink-faint); font-size: 11.5px; margin: var(--space-4) 0 0; display: flex;
+  align-items: center; justify-content: center; gap: 6px; }
+.gc-visits[hidden] { display: none; }
+.gc-visits b { color: var(--gold-500); font-family: var(--font-figure); font-size: 16px; font-weight: 700; }
+.gc-eye { opacity: .8; }
+
 /* ---------- MetalTabs ---------- */
 .gc-tabs { display: flex; gap: var(--space-2); }
 .gc-tab {
@@ -787,6 +794,7 @@ footer { border-top: 1px solid var(--line); }
     </div>
   </div>
 
+  <div class="gc-visits" id="visits" hidden><span class="gc-eye" aria-hidden="true">👁</span><span data-i18n="visitsLbl">عدد الزيارات</span> <b id="visitsNum">—</b></div>
   <footer><span data-i18n="foot">الأسعار إرشادية من السوق العالمي · سعر البيع بالمحل يختلف قليلاً · صنع بواسطة </span><a href="https://www.instagram.com/alansari.tech/" target="_blank" rel="noopener noreferrer" dir="ltr">@alansari.tech</a>
     <br><a class="tg-link" href="https://t.me/Alansaritech" data-tg="Alansaritech" target="_blank" rel="noopener noreferrer"><span class="tg-ico"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span><span data-i18n="tg">تواصل معي على تلغرام</span> <bdi class="gc-handle">@Alansaritech</bdi></a></footer>
 </div>
@@ -1079,6 +1087,7 @@ footer { border-top: 1px solid var(--line); }
       pctVal: 'نسبة المصنعية',
       trend7: 'خلال 7 أيام',
       seoGold: 'الذهب عيار ', seoSilver: 'الفضة', seoIntl: 'السوق العالمي',
+      visitsLbl: 'زيارة للموقع',
       seoTpl: 'سعر جرام {m}اليوم في {c}: <b>{p}</b> · الأسعار عالمية وتُحدَّث كل 30 ثانية',
       chartOpen: 'اضغط للمؤشر', chartClose: 'إغلاق',
       chartGold: 'الذهب', chartSilver: 'الفضة',
@@ -1126,6 +1135,7 @@ footer { border-top: 1px solid var(--line); }
       pctVal: 'Making charge %',
       trend7: 'over 7 days',
       seoGold: 'Gold ', seoSilver: 'Silver', seoIntl: 'the global market',
+      visitsLbl: 'site visits',
       seoTpl: '{m}price per gram today in {c}: <b>{p}</b> · global price, refreshed every 30s',
       chartOpen: 'Tap for the chart', chartClose: 'Close',
       chartGold: 'Gold', chartSilver: 'Silver',
@@ -1739,7 +1749,7 @@ footer { border-top: 1px solid var(--line); }
         if (se) { se.placeholder = t('countrySearch'); se.setAttribute('aria-label', t('countrySearch')); }
     var cb = $('countryBtn');
     if (cb) { cb.setAttribute('aria-label', t('country')); }
-        buildCountries(); prices(); calc(); paintCd();
+        buildCountries(); prices(); calc(); paintCd();
     renderIndicators(indData);
     if (spot.gold != null) { seoText(); }
   }
@@ -1766,7 +1776,7 @@ footer { border-top: 1px solid var(--line); }
     try {
       var res = await Promise.all([fetchPrice("XAU"), fetchPrice("XAG")]);
       spot.gold = res[0]; spot.silver = res[1];
-      setLive(true, t('live'));
+      setLive(true, t('live'));
       recordSample();
       $("lastUpdate").textContent = new Date().toLocaleTimeString(lang === 'ar' ? "ar-SA" : "en-US");
       prices(); calc();
@@ -1799,8 +1809,23 @@ footer { border-top: 1px solid var(--line); }
       try { window.location.href = app; } catch (err) { webFallback(); }
     });
   })();
+  /* ---------- عدّاد الزيارات (abacus: مجاني، بلا تسجيل، CORS مفتوح) ---------- */
+  (function visitCounter() {
+    var NS = 'alansariteach-gold', KEY = 'visits', done = false;
+    try { done = sessionStorage.getItem('gcVisit') === '1'; } catch (e) {}
+    fetch('https://abacus.jasoncameron.dev/' + (done ? 'get' : 'hit') + '/' + NS + '/' + KEY)
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || typeof res.value !== 'number') { return; }
+        if (!done) { try { sessionStorage.setItem('gcVisit', '1'); } catch (e) {} }
+        $('visitsNum').textContent = res.value.toLocaleString('en-US');
+        $('visits').hidden = false;
+      })
+      .catch(function () { /* خدمة اختيارية — نتجاهل الفشل بصمت */ });
+  })();
+
   apply();
-  fetchFx(); setInterval(fetchFx, 600000);
+  fetchFx(); setInterval(fetchFx, 600000);
   loadIndicators();
   refresh(); setInterval(tickCd, 1000);
 </script>
