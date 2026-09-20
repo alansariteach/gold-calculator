@@ -358,7 +358,7 @@ html, body { overflow-x: hidden; }
   </section>
 
   <div class="prices">
-    <div class="gc-price gold"><div class="metal"><i></i>الذهب (الأونصة)</div><div class="val num" id="goldOz">—</div><div class="gram">الغرام: <span class="num" id="goldGram">—</span></div></div>
+    <div class="gc-price gold"><div class="metal"><i></i><span id="goldTitle">الذهب · عيار 24</span></div><div class="val num" id="goldOz">—</div><div class="gram"><span id="goldGramLabel">غرام عيار 24:</span> <span class="num" id="goldGram">—</span></div></div>
     <div class="gc-price silver"><div class="metal"><i></i>الفضة (الأونصة)</div><div class="val num" id="silverOz">—</div><div class="gram">الغرام: <span class="num" id="silverGram">—</span></div></div>
   </div>
 
@@ -403,12 +403,16 @@ html, body { overflow-x: hidden; }
   var metal = 'gold', cur = 'USD';
   var $ = function (id) { return document.getElementById(id); };
   function fmt(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function curKarat() { return parseFloat($('karat').value) || 24; }
   function prices() {
     if (spot.gold == null) return;
-    $('goldOz').textContent = fmt(spot.gold * fx[cur]) + ' ' + cur;
-    $('silverOz').textContent = fmt(spot.silver * fx[cur]) + ' ' + cur;
-    $('goldGram').textContent = fmt(spot.gold / OZ * fx[cur]);
-    $('silverGram').textContent = fmt(spot.silver / OZ * fx[cur]);
+    var kv = curKarat(), k = kv / 24, f = fx[cur];
+    $('goldTitle').textContent = 'الذهب · عيار ' + kv;
+    $('goldGramLabel').textContent = 'غرام عيار ' + kv + ':';
+    $('goldOz').textContent = fmt(spot.gold * k * f) + ' ' + cur;
+    $('silverOz').textContent = fmt(spot.silver * f) + ' ' + cur;
+    $('goldGram').textContent = fmt(spot.gold / OZ * k * f);
+    $('silverGram').textContent = fmt(spot.silver / OZ * f);
   }
   function verdict(state, chip, text) {
     var v = $('verdict'); v.className = 'gc-verdict ' + state; $('chip').textContent = chip; $('verdictText').innerHTML = text;
@@ -452,6 +456,7 @@ html, body { overflow-x: hidden; }
   });
   $('country').onchange = function () { cur = this.value; prices(); calc(); };
   ['weight', 'seller', 'karat'].forEach(function (id) { $(id).oninput = calc; $(id).onchange = calc; });
+  $('karat').addEventListener('change', prices);
   function setLive(ok, text) { $("live").classList.toggle("ok", ok); $("liveText").textContent = text; }
   async function fetchPrice(sym) { var r = await fetch("https://api.gold-api.com/price/" + sym); var d = await r.json(); return d.price; }
   var COUNT = 30, left = COUNT, busy = false;
