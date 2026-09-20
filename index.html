@@ -1078,7 +1078,7 @@ footer { border-top: 1px solid var(--line); }
       perGram: ' للغرام',
       pctVal: 'نسبة المصنعية',
       trend7: 'خلال 7 أيام',
-      seoGold: 'الذهب عيار ', seoSilver: 'الفضة',
+      seoGold: 'الذهب عيار ', seoSilver: 'الفضة', seoIntl: 'السوق العالمي',
       seoTpl: 'سعر جرام {m}اليوم في {c}: <b>{p}</b> · الأسعار عالمية وتُحدَّث كل 30 ثانية',
       chartOpen: 'اضغط للمؤشر', chartClose: 'إغلاق',
       chartGold: 'الذهب', chartSilver: 'الفضة',
@@ -1125,7 +1125,7 @@ footer { border-top: 1px solid var(--line); }
       perGram: ' per gram',
       pctVal: 'Making charge %',
       trend7: 'over 7 days',
-      seoGold: 'Gold ', seoSilver: 'Silver',
+      seoGold: 'Gold ', seoSilver: 'Silver', seoIntl: 'the global market',
       seoTpl: '{m}price per gram today in {c}: <b>{p}</b> · global price, refreshed every 30s',
       chartOpen: 'Tap for the chart', chartClose: 'Close',
       chartGold: 'Gold', chartSilver: 'Silver',
@@ -1272,7 +1272,7 @@ footer { border-top: 1px solid var(--line); }
     var pg = (metal === 'gold' ? spot.gold / OZ * (k / 24) : spot.silver / OZ) * f;
     var info = countryInfo(cur);
     var what = metal === 'gold' ? t('seoGold') + k : t('seoSilver');
-    var place = info.name || cur;
+    var place = (cur === 'USD') ? t('seoIntl') : (info.name || cur);
     el.innerHTML = t('seoTpl').replace('{m}', escapeHTML(what + ' ')).replace('{c}', escapeHTML(place)).replace('{p}', fmt(pg) + ' ' + escapeHTML(cur));
   }
   function verdict(state, chipKey, html) {
