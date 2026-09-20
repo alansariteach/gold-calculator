@@ -343,19 +343,49 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   .hdr-right { display: flex; align-items: center; gap: var(--space-3); }
   .lang-btn { font-size: 12px; font-weight: 700; letter-spacing: .06em; padding: 8px 13px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); background: var(--surface-100); color: var(--gold-300); cursor: pointer; transition: border-color 200ms, color 200ms; min-height: 36px; }
   .lang-btn:hover { border-color: var(--gold-500); color: var(--gold-100); }
-  /* ---------- حقل البحث عن الدولة ---------- */
-  .gc-search { position: relative; }
-    .gc-field > span.gc-search { display: block; margin-bottom: var(--space-2); }
-    .gc-search .gc-search-ico { position: absolute; inset-inline-start: var(--space-3); top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--ink-faint); pointer-events: none; }
-  .gc-field .gc-search input {
-    direction: inherit; text-align: start; font-family: var(--font-sans); font-variant-numeric: normal;
-    width: 100%; padding-block: var(--space-3); padding-inline: 40px var(--space-3); font-size: 16px;
+  /* ---------- خانة الدولة: قائمة منسدلة فيها بحث ---------- */
+  .gc-combo { position: relative; }
+  .gc-combo-btn {
+    display: flex; align-items: center; gap: var(--space-3); width: 100%;
+    padding: var(--space-3) var(--space-3); padding-inline-end: 40px;
     border-radius: var(--radius-md); border: 1px solid var(--line);
     background: var(--surface-well); color: var(--ink);
-    box-shadow: var(--shadow-well); transition: border-color 160ms, box-shadow 160ms;
+    font: inherit; font-size: 16px; text-align: start; cursor: pointer;
+    box-shadow: var(--shadow-well); position: relative;
+    transition: border-color 160ms, box-shadow 160ms;
   }
-  .gc-field .gc-search input::placeholder { color: var(--ink-faint); }
-  .gc-field .gc-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .gc-combo-btn:hover { border-color: var(--line-strong); }
+  .gc-combo-btn:focus-visible { outline: none; border-color: var(--gold-500); box-shadow: var(--shadow-focus); }
+  .gc-combo-btn .gc-cname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gc-flag { font-size: 18px; line-height: 1; flex: none; }
+  .gc-cur { color: var(--ink-faint); font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; flex: none; }
+  .gc-chev { position: absolute; inset-inline-end: var(--space-3); top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--ink-muted); pointer-events: none; transition: transform 160ms; }
+  .gc-combo.open .gc-chev { transform: translateY(-50%) rotate(180deg); }
+  .gc-combo-panel {
+    position: absolute; z-index: 40; inset-inline: 0; top: calc(100% + 6px);
+    display: flex; flex-direction: column; gap: var(--space-2);
+    padding: var(--space-2);
+    background: var(--surface-100); border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-raised);
+  }
+  .gc-combo-panel[hidden] { display: none; }
+  .gc-combo-search { position: relative; }
+  .gc-combo-search svg { position: absolute; inset-inline-start: var(--space-3); top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--ink-faint); pointer-events: none; }
+  .gc-combo-search input {
+    width: 100%; font: inherit; font-size: 16px; color: var(--ink);
+    padding-block: 10px; padding-inline: 36px var(--space-3);
+    background: var(--surface-well); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); box-shadow: var(--shadow-well);
+  }
+  .gc-combo-search input::placeholder { color: var(--ink-faint); }
+  .gc-combo-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .gc-combo-search input:focus { outline: none; border-color: var(--gold-500); box-shadow: var(--shadow-focus); }
+  .gc-combo-list { max-height: 264px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .gc-combo-item { display: flex; align-items: center; gap: var(--space-3); padding: 11px var(--space-3); border-radius: var(--radius-sm); cursor: pointer; color: var(--ink); }
+  .gc-combo-item .gc-cname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gc-combo-item:hover, .gc-combo-item.active { background: var(--surface-200); }
+  .gc-combo-item.sel { box-shadow: inset 0 0 0 1px var(--gold-700); }
+  .gc-combo-empty { padding: 14px var(--space-3); text-align: center; color: var(--ink-faint); }
 
   /* ---------- تجاوب: كمبيوتر · أندرويد · آيفون ---------- */
   @media (max-width: 900px) {
@@ -448,13 +478,22 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       <label class="gc-field" id="karatField"><span data-i18n="karat">العيار</span>
         <select id="karat"><option value="24">24</option><option value="22">22</option><option value="21" selected>21</option><option value="18">18</option></select>
       </label>
-      <label class="gc-field"><span data-i18n="country">الدولة</span>
-              <span class="gc-search">
-                <svg class="gc-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
-                <input type="search" id="countrySearch" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search" aria-label="Search country">
-              </span>
-              <select id="country"></select>
-            </label>
+      <div class="gc-field" id="countryField">
+        <span data-i18n="country">الدولة</span>
+        <div class="gc-combo" id="countryCombo">
+          <button type="button" class="gc-combo-btn" id="countryBtn" aria-haspopup="listbox" aria-expanded="false">
+            <span id="countryLabel"></span>
+            <svg class="gc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"></path></svg>
+          </button>
+          <div class="gc-combo-panel" id="countryPanel" hidden>
+            <div class="gc-combo-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+              <input type="search" id="countrySearch" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search">
+            </div>
+            <div class="gc-combo-list" id="countryList" role="listbox"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="gc-row">
       <label class="gc-field"><span data-i18n="weight">الوزن (غرام)</span><input type="number" id="weight" value="10" min="0" step="0.001" inputmode="decimal"></label>
@@ -789,7 +828,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   };
   function t(k) { return T[lang][k]; }
 
-  var cSearch = '';
+  var cSearch = '', cItems = [], cActive = -1;
   /* أسماء دارجة ما تطابق الاسم الرسمي في القائمة */
   var ALIAS = {
     US: ['امريكا', 'أمريكا', 'usa', 'america'],
@@ -814,6 +853,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       .replace(/[\u2019'\u2018`]/g, '')
       .replace(/\s+/g, ' ').trim();
   }
+  function escapeHTML(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function countryHit(c, q) {
     var names = [c[1], c[3], c[2], c[0], c[1].replace(/^\u0627\u0644/, ''), c[3].replace(/^the\s+/i, '')];
     var al = (ALIAS[c[0]] || []).concat(ALIAS[c[2]] || []);
@@ -824,26 +864,73 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     }
     return false;
   }
-
+  function countryInfo(code) {
+    if (code === 'USD') { return { cur: 'USD', name: t('intl'), flag: '' }; }
+    for (var i = 0; i < COUNTRIES.length; i++) {
+      if (COUNTRIES[i][2] === code) {
+        return { cur: code, name: lang === 'ar' ? COUNTRIES[i][1] : COUNTRIES[i][3], flag: flagOf(COUNTRIES[i][0]) };
+      }
+    }
+    return { cur: code, name: code, flag: '' };
+  }
+  function rowHTML(it) {
+    return (it.flag ? '<span class="gc-flag">' + it.flag + '</span>' : '') +
+      '<span class="gc-cname">' + escapeHTML(it.name) + '</span>' +
+      '<span class="gc-cur">' + escapeHTML(it.cur) + '</span>';
+  }
+  function countryLabel() {
+    var it = countryInfo(cur);
+    $('countryLabel').innerHTML = (it.flag ? '<span class="gc-flag">' + it.flag + '</span>' : '') +
+      '<span class="gc-cname">' + escapeHTML(it.name) + '</span><span class="gc-cur">' + escapeHTML(it.cur) + '</span>';
+  }
+  /* يبني القائمة المفلترة داخل نفس الخانة */
   function buildCountries() {
-    var sel = $('country'), want = sel.value || cur || 'USD', list = COUNTRIES.slice();
+    var list = COUNTRIES.slice();
     if (lang === 'en') {
       var gcc = list.slice(0, 6), rest = list.slice(6).sort(function (a, b) { return a[3].localeCompare(b[3], 'en'); });
       list = gcc.concat(rest);
     }
     var q = norm(cSearch);
     if (q) { list = list.filter(function (c) { return countryHit(c, q); }); }
-    if (q && !list.length) {
-      sel.innerHTML = '<option value="" selected disabled>' + t('noRes') + '</option>';
-      return;
-    }
-    sel.innerHTML = '<option value="USD">' + t('intl') + '</option>' + list.map(function (c) {
-      return '<option value="' + c[2] + '">' + flagOf(c[0]) + ' ' + (lang === 'ar' ? c[1] : c[3]) + '</option>';
+    cItems = [{ cur: 'USD', name: t('intl'), flag: '' }];
+    list.forEach(function (c) {
+      cItems.push({ cur: c[2], name: lang === 'ar' ? c[1] : c[3], flag: flagOf(c[0]) });
+    });
+    var html = cItems.map(function (it, i) {
+      return '<div class="gc-combo-item' + (cur === it.cur ? ' sel' : '') + '" role="option" aria-selected="' +
+        (cur === it.cur) + '" data-i="' + i + '">' + rowHTML(it) + '</div>';
     }).join('');
-    sel.value = want;
-    if (!sel.value) { sel.value = 'USD'; }
-    cur = sel.value;
+    if (q && list.length === 0) { html += '<div class="gc-combo-empty">' + escapeHTML(t('noRes')) + '</div>'; }
+    $('countryList').innerHTML = html;
+        cActive = -1;
+        countryLabel();
+        /* أول نتيجة حقيقية تكون محددة تلقائياً حتى Enter يختارها فوراً */
+        if (q && list.length) { setActive(1); }
+      }
+  function pickCountry(i) {
+    var it = cItems[i];
+    if (!it) return;
+    cur = it.cur;
+    var s = $('countrySearch'); s.value = ''; cSearch = '';
+    buildCountries(); closeCombo();
+    prices(); calc();
   }
+  function setActive(i) {
+    var items = $('countryList').querySelectorAll('.gc-combo-item');
+    if (!items.length) { cActive = -1; return; }
+    if (i < 0) { i = items.length - 1; }
+    if (i >= items.length) { i = 0; }
+    cActive = i;
+    for (var k = 0; k < items.length; k++) { items[k].classList.toggle('active', k === i); }
+    if (items[i].scrollIntoView) { items[i].scrollIntoView({ block: 'nearest' }); }
+  }
+  function openCombo(open) {
+    $('countryCombo').classList.toggle('open', !!open);
+    $('countryPanel').hidden = !open;
+    $('countryBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { $('countrySearch').focus(); }
+  }
+  function closeCombo() { openCombo(false); }
 
   function curKarat() { return parseFloat($('karat').value) || 24; }
   function prices() {
@@ -893,21 +980,24 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       calc();
     });
   });
-  $('country').onchange = function () { cur = this.value; prices(); calc(); };
-  (function countrySearch() {
-    var el = $('countrySearch');
-    if (!el) return;
-    function run() { cSearch = el.value; buildCountries(); prices(); calc(); }
-    el.addEventListener('input', run);
-    el.addEventListener('search', run);
-    el.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.keyCode === 13) {
-        e.preventDefault();
-        var sel = $('country');
-        if (sel.options.length === 2) { sel.selectedIndex = 1; cur = sel.value; prices(); calc(); }
-        this.blur();
-      }
+  (function countryCombo() {
+    var combo = $('countryCombo'), btn = $('countryBtn'), panel = $('countryPanel'),
+        inp = $('countrySearch'), listBox = $('countryList');
+    if (!combo || !btn) return;
+    btn.addEventListener('click', function () { openCombo(panel.hidden); });
+    inp.addEventListener('input', function () { cSearch = inp.value; buildCountries(); });
+    inp.addEventListener('keydown', function (e) {
+      var k = e.key || e.keyCode;
+      if (k === 'Enter' || k === 13) { e.preventDefault(); pickCountry(cActive < 0 ? 0 : cActive); }
+      else if (k === 'ArrowDown' || k === 40) { e.preventDefault(); setActive(cActive + 1); }
+      else if (k === 'ArrowUp' || k === 38) { e.preventDefault(); setActive(cActive - 1); }
+      else if (k === 'Escape' || k === 27) { e.preventDefault(); closeCombo(); btn.focus(); }
     });
+    listBox.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('.gc-combo-item') : null;
+      if (el) { pickCountry(parseInt(el.getAttribute('data-i'), 10)); }
+    });
+    document.addEventListener('click', function (e) { if (!combo.contains(e.target)) { closeCombo(); } });
   })();
   ['weight', 'seller', 'karat'].forEach(function (id) { $(id).oninput = calc; $(id).onchange = calc; });
   $('karat').addEventListener('change', prices);
@@ -925,6 +1015,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     $('langBtn').textContent = lang === 'ar' ? 'EN' : 'عربي';
         var se = $('countrySearch');
         if (se) { se.placeholder = t('countrySearch'); se.setAttribute('aria-label', t('countrySearch')); }
+    var cb = $('countryBtn');
+    if (cb) { cb.setAttribute('aria-label', t('country')); }
         buildCountries(); prices(); calc(); paintCd();
   }
   $('langBtn').onclick = function () {
