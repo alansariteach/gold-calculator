@@ -311,6 +311,15 @@ body.gc-locked { overflow: hidden; }
 .gc-row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
 .gc-row > * { flex: 1; min-width: 140px; }
 
+/* ---------- وحدة الوزن ---------- */
+.gc-units { display: flex; gap: 4px; margin-bottom: var(--space-2); background: var(--surface-well);
+  border: 1px solid var(--line); border-radius: var(--radius-md); padding: 3px; box-shadow: var(--shadow-well); }
+.gc-unit { flex: 1; text-align: center; padding: 7px 4px; border-radius: var(--radius-sm); cursor: pointer;
+  border: 1px solid transparent; background: transparent; color: var(--ink-muted); font: inherit; font-size: 12.5px; font-weight: 700; }
+.gc-unit:hover { color: var(--ink); }
+.gc-unit.on { background: var(--surface-200); color: var(--gold-500); border-color: var(--gold-700); }
+.gc-field .gc-units + input { direction: ltr; }
+
 /* ---------- Button ---------- */
 .gc-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
@@ -596,7 +605,13 @@ body.gc-locked { overflow: hidden; }
       </div>
     </div>
     <div class="gc-row">
-      <label class="gc-field"><span data-i18n="weight">الوزن (غرام)</span><input type="number" id="weight" value="10" min="0" step="0.001" inputmode="decimal"></label>
+      <label class="gc-field"><span data-i18n="weight">الوزن</span>
+        <span class="gc-units" id="units" role="group">
+          <button type="button" class="gc-unit on" data-u="1" data-i18n="unitG">غرام</button>
+          <button type="button" class="gc-unit" data-u="31.1035" data-i18n="unitOz">أونصة</button>
+          <button type="button" class="gc-unit" data-u="1000" data-i18n="unitKg">كيلو</button>
+        </span>
+        <input type="number" id="weight" value="10" min="0" step="0.001" inputmode="decimal"></label>
       <label class="gc-field"><span data-i18n="seller">سعر البائع المعلن للقطعة</span><input type="number" id="seller" value="0" min="0" step="0.001" inputmode="decimal"><span class="hint" style="font-size:12px" data-i18n="sellerHint">اختياري — لحساب المصنعية</span></label>
     </div>
 
@@ -897,7 +912,7 @@ body.gc-locked { overflow: hidden; }
 ["HK","هونغ كونغ","HKD","Hong Kong"],
 ["WF","واليس وفوتونا","XPF","Wallis and Futuna"]
 ];
-  var lang = 'ar', metal = 'gold', cur = 'USD';
+  var lang = 'ar', metal = 'gold', cur = 'USD', wUnit = 1;
   var $ = function (id) { return document.getElementById(id); };
   function flagOf(iso) { return iso.replace(/./g, function (ch) { return String.fromCodePoint(0x1F1E6 + ch.charCodeAt(0) - 65); }); }
   function fmt(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
@@ -913,7 +928,8 @@ body.gc-locked { overflow: hidden; }
       silverOz: 'الفضة (الأونصة)', gram: 'الغرام:',
       tabGold: 'ذهب', tabSilver: 'فضة',
       calcTitle: 'احسب قيمة القطعة',
-      karat: 'العيار', country: 'الدولة', weight: 'الوزن (غرام)',
+      karat: 'العيار', country: 'الدولة', weight: 'الوزن',
+      unitG: 'غرام', unitOz: 'أونصة', unitKg: 'كيلو',
       countrySearch: 'ابحث عن دولتك…', noRes: 'لا توجد دولة مطابقة',
       geoTitle: 'نحدد دولتك تلقائياً؟',
       geoSub: 'نسمح للموقع بمعرفة موقعك مرة واحدة، ونختار الدولة وعملتها فوراً.',
@@ -958,7 +974,8 @@ body.gc-locked { overflow: hidden; }
       silverOz: 'Silver (per ounce)', gram: 'Per gram:',
       tabGold: 'Gold', tabSilver: 'Silver',
       calcTitle: 'Calculate the piece value',
-      karat: 'Karat', country: 'Country', weight: 'Weight (grams)',
+      karat: 'Karat', country: 'Country', weight: 'Weight',
+      unitG: 'Grams', unitOz: 'Ounce', unitKg: 'Kilo',
       countrySearch: 'Search your country…', noRes: 'No matching country',
       geoTitle: 'Detect your country automatically?',
       geoSub: 'Allow location once — we pick your country and currency instantly.',
@@ -1120,7 +1137,7 @@ body.gc-locked { overflow: hidden; }
     var ml = $('metalValLbl');
     if (ml) { ml.textContent = metal === 'silver' ? t('metalValSilver') : t('metalValGold'); }
     if (spot.gold == null) return;
-    var w = parseFloat($('weight').value) || 0;
+    var w = (parseFloat($('weight').value) || 0) * wUnit;
     var k = metal === 'gold' ? curKarat() / 24 : 1;
     var ppg = (metal === 'gold' ? spot.gold : spot.silver) / OZ * k, mv = w * ppg, sp = parseFloat($('seller').value) || 0;
     var f = fxRate();
@@ -1260,6 +1277,23 @@ body.gc-locked { overflow: hidden; }
     document.addEventListener('click', function (e) { if (!combo.contains(e.target)) { closeCombo(); } });
   })();
   ['weight', 'seller', 'karat'].forEach(function (id) { $(id).oninput = calc; $(id).onchange = calc; });
+  (function unitBar() {
+    var box = $('units');
+    if (!box) return;
+    var btns = box.querySelectorAll('.gc-unit');
+    function mark(u) {
+      for (var i = 0; i < btns.length; i++) { btns[i].classList.toggle('on', parseFloat(btns[i].getAttribute('data-u')) === u); }
+    }
+    try { var s = parseFloat(localStorage.getItem('gcUnit')); if (s > 0) { wUnit = s; } } catch (e) {}
+    mark(wUnit);
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        wUnit = parseFloat(this.getAttribute('data-u')) || 1;
+        try { localStorage.setItem('gcUnit', String(wUnit)); } catch (e) {}
+        mark(wUnit); calc();
+      });
+    }
+  })();
   $('karat').addEventListener('change', prices);
 
   /* ---------- مؤشر اتجاه الذهب والفضة (آخر 7 أيام) ---------- */
