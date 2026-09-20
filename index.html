@@ -532,7 +532,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     <div class="gc-result" id="result">
       <div class="total num" id="total">—</div>
       <div class="line"><span class="lbl" id="metalValLbl" data-i18n="metalVal">قيمة المعدن الصافي (بدون مصنعية)</span><span class="val num" id="metalVal">—</span></div>
-      <div class="line" id="workRow" hidden><span class="lbl" data-i18n="workVal">المصنعية (سعر البائع − قيمة المعدن)</span><span class="val num" id="workVal">—</span></div>
+      <div class="line" id="workRow" hidden><span class="lbl" data-i18n="workVal">المصنعية على القطعة كاملة</span><span class="val num" id="workVal">—</span></div>
+      <div class="line" id="workGramRow" hidden><span class="lbl" data-i18n="workGramVal">المصنعية على الغرام الواحد</span><span class="val num" id="workGramVal">—</span></div>
       <div class="line" id="pctRow" hidden><span class="lbl" data-i18n="pctVal">نسبة المصنعية</span><span class="val num" id="pctVal">—</span></div>
     </div>
 
@@ -838,11 +839,13 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       metalVal: 'قيمة المعدن الصافي (بدون مصنعية)',
       metalValGold: 'قيمة الذهب الصافي (بدون مصنعية)',
       metalValSilver: 'قيمة الفضة الصافية (بدون مصنعية)',
-      workVal: 'المصنعية (سعر البائع − قيمة المعدن)',
+      workVal: 'المصنعية على القطعة كاملة',
+      workGramVal: 'المصنعية على الغرام الواحد',
+      perGram: ' للغرام',
       pctVal: 'نسبة المصنعية',
       chipHow: 'كيف تستخدمه', chipGood: 'منطقية', chipWarn: 'فاصِل', chipBad: 'مرتفعة', chipCheck: 'تحقق',
       howText: 'قل للبائع «كم الوزن وكم العيار» → سجّلهما هنا، ثم اكتب السعر اللي قاله لك. الموقع يحسب قيمة المعدن الصافي ويوضح لك كم المصنعية، فتقرر تفاصل أو تمشي.',
-      workTpl: 'البائع يعرض مصنعية <b class="num">{w}</b> ({p}% من قيمة المعدن). ',
+      workTpl: 'البائع يعرض مصنعية <b class="num">{w}</b> على القطعة كاملة، أي <b class="num">{g}</b> ({p}% من قيمة المعدن). ',
       goodText: 'سعر عادل — اشترِ.', warnText: 'أعلى من المعتاد — جرّب تفاصل قبل ما تدفع.', badText: 'مرتفعة جداً — قارن بمحل ثاني.',
       lowTpl: 'سعر البائع أقل من قيمة المعدن بـ <b class="num">{w}</b>. غالباً خطأ بالوزن أو العيار — تحقق من القطعة.',
       lastUpdate: 'آخر تحديث: ', auto: ' · يتحدث تلقائياً كل 30 ثانية · الأسعار من السوق الدولي',
@@ -874,11 +877,13 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       metalVal: 'Net metal value (no making charge)',
       metalValGold: 'Net gold value (no making charge)',
       metalValSilver: 'Net silver value (no making charge)',
-      workVal: 'Making charge (seller price \u2212 metal value)',
+      workVal: 'Making charge for the whole piece',
+      workGramVal: 'Making charge per gram',
+      perGram: ' per gram',
       pctVal: 'Making charge %',
       chipHow: 'How to use', chipGood: 'Fair', chipWarn: 'Negotiate', chipBad: 'High', chipCheck: 'Check',
       howText: 'Ask the seller for the weight and karat, enter them here, then type the quoted price. The site shows the real metal value and the making charge, so you decide whether to negotiate or walk away.',
-      workTpl: 'The seller is asking <b class="num">{w}</b> making charge ({p}% of the metal value). ',
+      workTpl: 'The seller is asking <b class="num">{w}</b> making charge for the piece \u2014 that is <b class="num">{g}</b> ({p}% of the metal value). ',
       goodText: 'A fair price — buy.', warnText: 'Above the usual rate — try to negotiate first.', badText: 'Very high — compare another shop.',
       lowTpl: 'The asking price is <b class="num">{w}</b> below the metal value. Usually a weight or karat mistake — check the piece.',
       lastUpdate: 'Last update: ', auto: ' · auto-refreshes every 30s · prices from the global market',
@@ -1025,16 +1030,25 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       if (work >= 0) {
         var state = pct <= 15 ? 'good' : pct <= 25 ? 'warn' : 'bad';
         wr.hidden = pr.hidden = false; wr.className = pr.className = 'line ' + state;
-        $('workVal').textContent = fmt(work * f) + ' ' + cur; $('pctVal').textContent = fmt(pct) + ' %';
+        var wg = w > 0 ? work / w : 0;
+        $('workVal').textContent = fmt(work * f) + ' ' + cur;
+        $('pctVal').textContent = fmt(pct) + ' %';
+        var gr = $('workGramRow');
+        if (gr) {
+          gr.hidden = !(w > 0); gr.className = 'line ' + state;
+          $('workGramVal').textContent = fmt(wg * f) + ' ' + cur + t('perGram');
+        }
         verdict(state, state === 'good' ? 'chipGood' : state === 'warn' ? 'chipWarn' : 'chipBad',
-          t('workTpl').replace('{w}', fmt(work * f) + ' ' + cur).replace('{p}', fmt(pct)) +
+          t('workTpl').replace('{w}', fmt(work * f) + ' ' + cur).replace('{g}', fmt(wg * f) + ' ' + cur + t('perGram')).replace('{p}', fmt(pct)) +
           (state === 'good' ? t('goodText') : state === 'warn' ? t('warnText') : t('badText')));
       } else {
         wr.hidden = pr.hidden = true;
+        var gr2 = $('workGramRow'); if (gr2) { gr2.hidden = true; }
         verdict('bad', 'chipCheck', t('lowTpl').replace('{w}', fmt(-work * f) + ' ' + cur));
       }
     } else {
       wr.hidden = pr.hidden = true;
+      var gr3 = $('workGramRow'); if (gr3) { gr3.hidden = true; }
       verdict('info', 'chipHow', t('howText'));
     }
   }
