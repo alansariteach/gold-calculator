@@ -80,6 +80,9 @@
 .gc { direction: rtl; font-family: var(--font-sans); color: var(--ink); background: var(--surface-000); }
 .gc *, .gc *::before, .gc *::after { box-sizing: border-box; }
 html, body { overflow-x: hidden; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+.gc * { -webkit-tap-highlight-color: transparent; }
+.gc input, .gc select, .gc button, .gc-tab { touch-action: manipulation; }
 .gc .num { direction: ltr; unicode-bidi: isolate; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
 /* ---------- Surfaces ---------- */
@@ -166,7 +169,7 @@ html, body { overflow-x: hidden; }
 
 /* ---------- Bars (photographic hero, replaces the CSS ingot) ---------- */
 .gc-bars { position: relative; display: inline-block; perspective: var(--perspective); padding: var(--space-4) var(--space-4) var(--space-6); }
-.gc-bars img { display: block; height: 240px; width: auto; max-width: 100%;
+.gc-bars img { display: block; height: clamp(140px, 27vw, 240px); width: auto; max-width: 100%;
   transform: rotateY(-8deg); transition: transform 300ms ease-out;
   filter: drop-shadow(0 18px 24px var(--scrim)); }
 .gc-bars.gold img { filter: drop-shadow(0 18px 24px var(--scrim)) drop-shadow(0 0 28px var(--glow-gold)); }
@@ -300,16 +303,19 @@ html, body { overflow-x: hidden; }
 /* page */
 
   html, body { margin: 0; }
-  body { background: var(--surface-000); min-height: 100vh;
-    background-image: radial-gradient(900px 420px at 50% -120px, var(--glow-gold), transparent 70%); }
-  .wrap { max-width: var(--measure); margin: 0 auto; padding: var(--space-4) var(--space-4) var(--space-10); }
+    html { -webkit-text-size-adjust: 100%; }
+    body { background: var(--surface-000); min-height: 100vh;
+      min-height: 100svh;
+      background-image: radial-gradient(900px 420px at 50% -120px, var(--glow-gold), transparent 70%); }
+    .wrap { max-width: var(--measure); margin: 0 auto;
+      padding: var(--space-4) max(var(--space-4), env(safe-area-inset-right)) calc(var(--space-10) + env(safe-area-inset-bottom)) max(var(--space-4), env(safe-area-inset-left)); }
   header { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); flex-wrap: wrap; padding: var(--space-2) 0 var(--space-4); }
-  .brand { font-family: var(--font-display); font-weight: 800; font-size: 26px; line-height: 1.15; margin: 0; }
+  .brand { font-family: var(--font-display); font-weight: 800; font-size: clamp(18px, 4.4vw, 26px); line-height: 1.15; margin: 0; }
   .brand .g { color: var(--gold-500); text-shadow: var(--shadow-gold-glow); }
   .brand .s { color: var(--silver-500); }
   .gc-live { font-size: 13px; }
   .hero { text-align: center; padding: var(--space-6) 0 var(--space-4); }
-  .hero h2 { font-family: var(--font-display); font-weight: 900; font-size: 44px; line-height: 1.05; letter-spacing: -.01em; margin: 0 0 var(--space-2); color: var(--ink); }
+  .hero h2 { font-family: var(--font-display); font-weight: 900; font-size: clamp(27px, 5.6vw, 44px); line-height: 1.05; letter-spacing: -.01em; margin: 0 0 var(--space-2); color: var(--ink); }
   .hero p { margin: 0 0 var(--space-2); color: var(--ink-muted); font-size: 15px; line-height: 1.7; }
   .ingots { display: flex; justify-content: center; align-items: flex-end; gap: var(--space-8); flex-wrap: wrap; }
   .gc-bars-cap { font-size: 12px; }
@@ -324,7 +330,7 @@ html, body { overflow-x: hidden; }
   .gc-field input, .gc-field select { font-size: 16px; }
   .gc-row { margin-bottom: var(--space-3); }
   .gc-result { margin-top: var(--space-4); }
-  .gc-result .total { font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -.01em; }
+  .gc-result .total { font-size: clamp(24px, 6vw, 34px); line-height: 1.1; font-weight: 700; letter-spacing: -.01em; }
   .gc-result .line { font-size: 14px; }
   .gc-verdict { margin-top: var(--space-4); }
   .gc-verdict p { font-size: 14px; line-height: 1.7; }
@@ -337,7 +343,66 @@ html, body { overflow-x: hidden; }
   .hdr-right { display: flex; align-items: center; gap: var(--space-3); }
   .lang-btn { font-size: 12px; font-weight: 700; letter-spacing: .06em; padding: 8px 13px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); background: var(--surface-100); color: var(--gold-300); cursor: pointer; transition: border-color 200ms, color 200ms; min-height: 36px; }
   .lang-btn:hover { border-color: var(--gold-500); color: var(--gold-100); }
-  @media (max-width: 560px) { .hero h2 { font-size: 32px; } .gc-result .total { font-size: 26px; } .brand { font-size: 17px; } .gc-live { font-size: 12px; } }
+  /* ---------- حقل البحث عن الدولة ---------- */
+  .gc-search { position: relative; display: flex; align-items: center; margin-bottom: var(--space-2); }
+  .gc-search .gc-search-ico { position: absolute; inset-inline-start: var(--space-3); width: 16px; height: 16px; color: var(--ink-faint); pointer-events: none; }
+  .gc-field .gc-search input {
+    direction: inherit; text-align: start; font-family: var(--font-sans); font-variant-numeric: normal;
+    width: 100%; padding-block: var(--space-3); padding-inline: 40px var(--space-3); font-size: 16px;
+    border-radius: var(--radius-md); border: 1px solid var(--line);
+    background: var(--surface-well); color: var(--ink);
+    box-shadow: var(--shadow-well); transition: border-color 160ms, box-shadow 160ms;
+  }
+  .gc-field .gc-search input::placeholder { color: var(--ink-faint); }
+  .gc-field .gc-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+  /* ---------- تجاوب: كمبيوتر · أندرويد · آيفون ---------- */
+  @media (max-width: 900px) {
+    :root { --measure: 100%; }
+    .hero { padding: var(--space-4) 0 var(--space-3); }
+    .ingots { gap: var(--space-5); }
+    .prices { margin: var(--space-3) 0 var(--space-5); }
+  }
+  @media (max-width: 640px) {
+    :root { --space-10: 28px; }
+    .wrap { padding-top: var(--space-3); }
+    header { padding-bottom: var(--space-3); gap: var(--space-2); }
+    .gc-live { font-size: 12px; padding: 5px var(--space-2) 5px var(--space-3); }
+    .gc-cd { font-size: 10px; }
+    .lang-btn { min-height: 34px; padding: 7px 11px; font-size: 11.5px; }
+    .hero p { font-size: 14px; }
+    .ingots { gap: var(--space-3); }
+    .gc-bars { padding: var(--space-2) var(--space-2) var(--space-4); }
+    .gc-bars-cap { font-size: 11px; }
+    .gc-card { padding: var(--space-4); border-radius: var(--radius-lg); }
+    .prices { gap: var(--space-2); }
+    .gc-price { padding: var(--space-3); }
+    .gc-price .val { font-size: 18px; }
+    .gc-price .metal, .gc-price .gram { font-size: 11.5px; }
+    .gc-tab { padding: 12px var(--space-3); font-size: 14px; }
+    .gc-row { gap: var(--space-2); }
+    .gc-row > * { min-width: 100%; }
+    .gc-result { padding: var(--space-4); }
+    .gc-result .line { font-size: 13px; }
+    .gc-verdict { padding: 11px 13px; }
+    .gc-verdict p { font-size: 13.5px; }
+    footer { font-size: 11.5px; }
+  }
+  @media (max-width: 380px) {
+    .gc-bars img { height: 124px; }
+    .gc-price .val { font-size: 16.5px; }
+    .gc-price .metal, .gc-price .gram { font-size: 11px; }
+  }
+  /* شاشات اللمس: بلا تأثيرات hover معلّقة + مساحات لمس مريحة */
+  @media (hover: none) {
+    .gc-price:hover, .gc-tab:hover, .gc-btn:hover { transform: none; }
+    .gc-bars:hover img { transform: rotateY(-8deg); }
+    .gc-field select, .gc-field input, .gc-tab, .gc-btn { min-height: 48px; }
+  }
+  @media (orientation: landscape) and (max-height: 480px) {
+    .hero { padding: var(--space-2) 0; }
+    .gc-bars { padding-top: 0; }
+  }
 
 </style>
 </head>
@@ -383,12 +448,16 @@ html, body { overflow-x: hidden; }
         <select id="karat"><option value="24">24</option><option value="22">22</option><option value="21" selected>21</option><option value="18">18</option></select>
       </label>
       <label class="gc-field"><span data-i18n="country">الدولة</span>
-        <select id="country"></select>
-      </label>
+              <span class="gc-search">
+                <svg class="gc-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+                <input type="search" id="countrySearch" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search" aria-label="Search country">
+              </span>
+              <select id="country"></select>
+            </label>
     </div>
     <div class="gc-row">
-      <label class="gc-field"><span data-i18n="weight">الوزن (غرام)</span><input type="number" id="weight" value="10" min="0" step="0.001"></label>
-      <label class="gc-field"><span data-i18n="seller">سعر البائع المعلن للقطعة</span><input type="number" id="seller" value="0" min="0" step="0.001"><span class="hint" style="font-size:12px" data-i18n="sellerHint">اختياري — لحساب المصنعية</span></label>
+      <label class="gc-field"><span data-i18n="weight">الوزن (غرام)</span><input type="number" id="weight" value="10" min="0" step="0.001" inputmode="decimal"></label>
+      <label class="gc-field"><span data-i18n="seller">سعر البائع المعلن للقطعة</span><input type="number" id="seller" value="0" min="0" step="0.001" inputmode="decimal"><span class="hint" style="font-size:12px" data-i18n="sellerHint">اختياري — لحساب المصنعية</span></label>
     </div>
 
     <div class="gc-result" id="result">
@@ -675,6 +744,7 @@ html, body { overflow-x: hidden; }
       tabGold: 'ذهب', tabSilver: 'فضة',
       calcTitle: 'احسب قيمة القطعة',
       karat: 'العيار', country: 'الدولة', weight: 'الوزن (غرام)',
+      countrySearch: 'ابحث عن دولتك…', noRes: 'لا توجد دولة مطابقة',
       seller: 'سعر البائع المعلن للقطعة', sellerHint: 'اختياري — لحساب المصنعية',
       metalVal: 'قيمة المعدن الصافي (بدون مصنعية)',
       gramVal: 'سعر الغرام (اللي تفاصل عليه)',
@@ -700,6 +770,7 @@ html, body { overflow-x: hidden; }
       tabGold: 'Gold', tabSilver: 'Silver',
       calcTitle: 'Calculate the piece value',
       karat: 'Karat', country: 'Country', weight: 'Weight (grams)',
+      countrySearch: 'Search your country…', noRes: 'No matching country',
       seller: 'Seller\u2019s asking price', sellerHint: 'Optional — reveals the making charge',
       metalVal: 'Net metal value (no making charge)',
       gramVal: 'Price per gram (negotiable)',
@@ -717,11 +788,53 @@ html, body { overflow-x: hidden; }
   };
   function t(k) { return T[lang][k]; }
 
+  var cSearch = '';
+  /* أسماء دارجة ما تطابق الاسم الرسمي في القائمة */
+  var ALIAS = {
+    US: ['امريكا', 'أمريكا', 'usa', 'america'],
+    GB: ['بريطانيا', 'انجلترا', 'إنجلترا', 'england', 'britain', 'uk'],
+    EUR: ['يورو', 'euro'],
+    AE: ['دبي', 'أبوظبي', 'الامارات', 'الإمارات', 'uae', 'dubai'],
+    SA: ['السعوديه', 'ksa', 'riyadh'],
+    TR: ['turkey', 'turkiye'],
+    KR: ['سول', 'seoul'],
+    /* أسماء العملات بالعربي */
+    SAR: ['ريال'], QAR: ['ريال'], OMR: ['ريال'], YER: ['ريال'],
+    KWD: ['دينار'], BHD: ['دينار'], JOD: ['دينار'], IQD: ['دينار'], DZD: ['دينار'],
+    AED: ['درهم'], MAD: ['درهم'], EGP: ['جنيه'], TRY: ['ليرة']
+  };
+  /* تطبيع النص العربي: تشكيل + همزات + تاء مربوطة */
+  function norm(s) {
+    return (s == null ? '' : String(s)).toLowerCase()
+      .replace(/[\u064B-\u0652\u0670\u0640]/g, '')
+      .replace(/[\u0623\u0625\u0622\u0671]/g, '\u0627')
+      .replace(/\u0649/g, '\u064A').replace(/\u0629/g, '\u0647')
+      .replace(/\u0624/g, '\u0648').replace(/\u0626/g, '\u064A')
+      .replace(/[\u2019'\u2018`]/g, '')
+      .replace(/\s+/g, ' ').trim();
+  }
+  function countryHit(c, q) {
+    var names = [c[1], c[3], c[2], c[0], c[1].replace(/^\u0627\u0644/, ''), c[3].replace(/^the\s+/i, '')];
+    var al = (ALIAS[c[0]] || []).concat(ALIAS[c[2]] || []);
+    if (al.length) { names = names.concat(al); }
+    for (var i = 0; i < names.length; i++) {
+      var n = norm(names[i]);
+      if (n === q || n.indexOf(q) === 0 || n.indexOf(' ' + q) > -1) { return true; }
+    }
+    return false;
+  }
+
   function buildCountries() {
     var sel = $('country'), want = sel.value || cur || 'USD', list = COUNTRIES.slice();
     if (lang === 'en') {
       var gcc = list.slice(0, 6), rest = list.slice(6).sort(function (a, b) { return a[3].localeCompare(b[3], 'en'); });
       list = gcc.concat(rest);
+    }
+    var q = norm(cSearch);
+    if (q) { list = list.filter(function (c) { return countryHit(c, q); }); }
+    if (q && !list.length) {
+      sel.innerHTML = '<option value="" selected disabled>' + t('noRes') + '</option>';
+      return;
     }
     sel.innerHTML = '<option value="USD">' + t('intl') + '</option>' + list.map(function (c) {
       return '<option value="' + c[2] + '">' + flagOf(c[0]) + ' ' + (lang === 'ar' ? c[1] : c[3]) + '</option>';
@@ -780,6 +893,21 @@ html, body { overflow-x: hidden; }
     });
   });
   $('country').onchange = function () { cur = this.value; prices(); calc(); };
+  (function countrySearch() {
+    var el = $('countrySearch');
+    if (!el) return;
+    function run() { cSearch = el.value; buildCountries(); prices(); calc(); }
+    el.addEventListener('input', run);
+    el.addEventListener('search', run);
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.keyCode === 13) {
+        e.preventDefault();
+        var sel = $('country');
+        if (sel.options.length === 2) { sel.selectedIndex = 1; cur = sel.value; prices(); calc(); }
+        this.blur();
+      }
+    });
+  })();
   ['weight', 'seller', 'karat'].forEach(function (id) { $(id).oninput = calc; $(id).onchange = calc; });
   $('karat').addEventListener('change', prices);
 
@@ -794,7 +922,9 @@ html, body { overflow-x: hidden; }
     $('brandG').textContent = t('brandG');
     $('brandS').textContent = t('brandS');
     $('langBtn').textContent = lang === 'ar' ? 'EN' : 'عربي';
-    buildCountries(); prices(); calc(); paintCd();
+        var se = $('countrySearch');
+        if (se) { se.placeholder = t('countrySearch'); se.setAttribute('aria-label', t('countrySearch')); }
+        buildCountries(); prices(); calc(); paintCd();
   }
   $('langBtn').onclick = function () {
     lang = lang === 'ar' ? 'en' : 'ar';
