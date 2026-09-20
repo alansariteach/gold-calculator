@@ -3,7 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>حاسبة الذهب والفضة | اعرف المصنعية قبل ما تشتري</title>
+<title>حاسبة الذهب والفضة | احسب المصنعية وسعر الجرام اليوم</title>
+<meta name="description" content="حاسبة مجانية للذهب والفضة: سعر الجرام اليوم لعيار 24 و22 و21 و18 وسعر الفضة لحظة بلحظة، وحساب قيمة القطعة والمصنعية بعملة بلدك (246 دولة) — تتحدّث تلقائياً.">
+<meta name="theme-color" content="#0a0705">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://alansariteach.github.io/gold-calculator/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0705'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' fill='%23f0cf7a' text-anchor='middle'%3EAu%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="حاسبة الذهب والفضة">
+<meta property="og:title" content="حاسبة الذهب والفضة — احسب المصنعية قبل لا تشتري">
+<meta property="og:description" content="سعر الذهب والفضة اليوم + احسب قيمة قطعتك والمصنعية بعملتك. مجاناً وبلا تسجيل.">
+<meta property="og:url" content="https://alansariteach.github.io/gold-calculator/">
+<meta property="og:image" content="https://alansariteach.github.io/gold-calculator/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ar_KW">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="حاسبة الذهب والفضة — احسب المصنعية قبل لا تشتري">
+<meta name="twitter:description" content="سعر الذهب والفضة اليوم + احسب قيمة قطعتك والمصنعية بعملتك.">
+<meta name="twitter:image" content="https://alansariteach.github.io/gold-calculator/og.jpg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"حاسبة الذهب والفضة","alternateName":"Gold & Silver Calculator","url":"https://alansariteach.github.io/gold-calculator/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":["ar","en"],"isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"حاسبة مجانية لسعر الذهب والفضة: سعر الجرام اليوم لكل عيار، حساب قيمة القطعة والمصنعية بأي عملة، مع مؤشر حركة السعر.","featureList":["سعر الذهب والفضة المباشر","حساب سعر الجرام لكل عيار","حساب المصنعية ونسبة المصنعية","246 دولة و246 عملة","مؤشر حركة السعر 5 دقائق إلى شهر"],"publisher":{"@type":"Organization","name":"Alansari Tech","sameAs":["https://www.instagram.com/alansari.tech/","https://t.me/Alansaritech"]}}
+</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=IBM+Plex+Mono:wght@600;700&display=swap">
 <style>
 /* tokens */
@@ -267,6 +289,10 @@ body.gc-locked { overflow: hidden; }
 .gc-chart-stats b { color: var(--ink); font-family: var(--font-mono); }
 .gc-chart-note { color: var(--ink-faint); font-size: 11px; margin-top: var(--space-2); line-height: 1.6; }
 .gc-chart-load { color: var(--ink-muted); font-size: 12.5px; text-align: center; padding: 26px 0; }
+
+/* ---------- سطر السعر النصي (يقرأه محرّك البحث + مفيد للزائر) ---------- */
+.gc-seo { text-align: center; color: var(--ink-muted); font-size: 12.5px; line-height: 1.7; margin: 0 0 var(--space-4); }
+.gc-seo b { color: var(--gold-500); font-family: var(--font-figure); font-size: 15px; font-weight: 700; }
 
 /* ---------- MetalTabs ---------- */
 .gc-tabs { display: flex; gap: var(--space-2); }
@@ -678,6 +704,8 @@ footer { border-top: 1px solid var(--line); }
     <div class="gc-price silver" id="silverCard" role="button" tabindex="0" aria-label="silver chart"><div class="metal"><i></i><span data-i18n="silverOz">الفضة (الأونصة)</span></div><div class="val num" id="silverOz">—</div><div class="gc-ind" id="silverInd" hidden></div><div class="gc-more" data-i18n="chartOpen">اضغط للمؤشر</div></div>
   </div>
 
+  <p class="gc-seo" id="seoLine"></p>
+
   <div class="gc-tabs" role="tablist">
     <div class="gc-tab active gold" role="tab" data-metal="gold" data-i18n="tabGold">ذهب</div>
     <div class="gc-tab silver" role="tab" data-metal="silver" data-i18n="tabSilver">فضة</div>
@@ -1050,6 +1078,8 @@ footer { border-top: 1px solid var(--line); }
       perGram: ' للغرام',
       pctVal: 'نسبة المصنعية',
       trend7: 'خلال 7 أيام',
+      seoGold: 'الذهب عيار ', seoSilver: 'الفضة',
+      seoTpl: 'سعر جرام {m}اليوم في {c}: <b>{p}</b> · الأسعار عالمية وتُحدَّث كل 30 ثانية',
       chartOpen: 'اضغط للمؤشر', chartClose: 'إغلاق',
       chartGold: 'الذهب', chartSilver: 'الفضة',
       r5m: '5 دقائق', r15m: '15 دقيقة', r1h: 'ساعة', r7d: 'أسبوع', r30d: 'شهر',
@@ -1095,6 +1125,8 @@ footer { border-top: 1px solid var(--line); }
       perGram: ' per gram',
       pctVal: 'Making charge %',
       trend7: 'over 7 days',
+      seoGold: 'Gold ', seoSilver: 'Silver',
+      seoTpl: '{m}price per gram today in {c}: <b>{p}</b> · global price, refreshed every 30s',
       chartOpen: 'Tap for the chart', chartClose: 'Close',
       chartGold: 'Gold', chartSilver: 'Silver',
       r5m: '5 min', r15m: '15 min', r1h: '1 hour', r7d: 'Week', r30d: 'Month',
@@ -1230,6 +1262,19 @@ footer { border-top: 1px solid var(--line); }
     $('goldOz').textContent = fmt(spot.gold * f) + ' ' + cur;
     $('silverOz').textContent = fmt(spot.silver * f) + ' ' + cur;
   }
+  function seoText() {
+    var el = $('seoLine');
+    if (!el) return;
+    if (spot.gold == null) { el.textContent = ''; return; }
+    var f = fxRate();
+    if (!f) { el.textContent = ''; return; }
+    var k = curKarat();
+    var pg = (metal === 'gold' ? spot.gold / OZ * (k / 24) : spot.silver / OZ) * f;
+    var info = countryInfo(cur);
+    var what = metal === 'gold' ? t('seoGold') + k : t('seoSilver');
+    var place = info.name || cur;
+    el.innerHTML = t('seoTpl').replace('{m}', escapeHTML(what + ' ')).replace('{c}', escapeHTML(place)).replace('{p}', fmt(pg) + ' ' + escapeHTML(cur));
+  }
   function verdict(state, chipKey, html) {
     var v = $('verdict'); v.className = 'gc-verdict ' + state; $('chip').textContent = t(chipKey); $('verdictText').innerHTML = html;
   }
@@ -1244,6 +1289,7 @@ footer { border-top: 1px solid var(--line); }
     if (!f) { $('total').textContent = '\u2014'; return; }
     $('total').textContent = fmt(mv * f) + ' ' + cur;
     $('metalVal').textContent = fmt(mv * f) + ' ' + cur;
+    seoText();
     var wr = $('workRow'), pr = $('pctRow');
     if (sp > 0 && mv > 0) {
       var work = sp / f - mv, pct = work / mv * 100;
@@ -1695,6 +1741,7 @@ footer { border-top: 1px solid var(--line); }
     if (cb) { cb.setAttribute('aria-label', t('country')); }
         buildCountries(); prices(); calc(); paintCd();
     renderIndicators(indData);
+    if (spot.gold != null) { seoText(); }
   }
   $('langBtn').onclick = function () {
     lang = lang === 'ar' ? 'en' : 'ar';
