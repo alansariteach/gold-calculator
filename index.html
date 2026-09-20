@@ -531,8 +531,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
     <div class="gc-result" id="result">
       <div class="total num" id="total">—</div>
-      <div class="line"><span class="lbl" data-i18n="metalVal">قيمة المعدن الصافي (بدون مصنعية)</span><span class="val num" id="metalVal">—</span></div>
-      <div class="line"><span class="lbl" data-i18n="gramVal">سعر الغرام (اللي تفاصل عليه)</span><span class="val num" id="gramVal">—</span></div>
+      <div class="line"><span class="lbl" id="metalValLbl" data-i18n="metalVal">قيمة المعدن الصافي (بدون مصنعية)</span><span class="val num" id="metalVal">—</span></div>
       <div class="line" id="workRow" hidden><span class="lbl" data-i18n="workVal">المصنعية (سعر البائع − قيمة المعدن)</span><span class="val num" id="workVal">—</span></div>
       <div class="line" id="pctRow" hidden><span class="lbl" data-i18n="pctVal">نسبة المصنعية</span><span class="val num" id="pctVal">—</span></div>
     </div>
@@ -837,7 +836,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       geoNoSupport: 'جهازك لا يدعم تحديد الموقع. اختر دولتك يدوياً.',
       seller: 'سعر البائع المعلن للقطعة', sellerHint: 'اختياري — لحساب المصنعية',
       metalVal: 'قيمة المعدن الصافي (بدون مصنعية)',
-      gramVal: 'سعر الغرام (اللي تفاصل عليه)',
+      metalValGold: 'قيمة الذهب الصافي (بدون مصنعية)',
+      metalValSilver: 'قيمة الفضة الصافية (بدون مصنعية)',
       workVal: 'المصنعية (سعر البائع − قيمة المعدن)',
       pctVal: 'نسبة المصنعية',
       chipHow: 'كيف تستخدمه', chipGood: 'منطقية', chipWarn: 'فاصِل', chipBad: 'مرتفعة', chipCheck: 'تحقق',
@@ -872,7 +872,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       geoNoSupport: 'Your device does not support location. Pick your country from the list.',
       seller: 'Seller\u2019s asking price', sellerHint: 'Optional — reveals the making charge',
       metalVal: 'Net metal value (no making charge)',
-      gramVal: 'Price per gram (negotiable)',
+      metalValGold: 'Net gold value (no making charge)',
+      metalValSilver: 'Net silver value (no making charge)',
       workVal: 'Making charge (seller price \u2212 metal value)',
       pctVal: 'Making charge %',
       chipHow: 'How to use', chipGood: 'Fair', chipWarn: 'Negotiate', chipBad: 'High', chipCheck: 'Check',
@@ -1008,6 +1009,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     var v = $('verdict'); v.className = 'gc-verdict ' + state; $('chip').textContent = t(chipKey); $('verdictText').innerHTML = html;
   }
   function calc() {
+    var ml = $('metalValLbl');
+    if (ml) { ml.textContent = metal === 'silver' ? t('metalValSilver') : t('metalValGold'); }
     if (spot.gold == null) return;
     var w = parseFloat($('weight').value) || 0;
     var k = metal === 'gold' ? curKarat() / 24 : 1;
@@ -1016,7 +1019,6 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     if (!f) { $('total').textContent = '\u2014'; return; }
     $('total').textContent = fmt(mv * f) + ' ' + cur;
     $('metalVal').textContent = fmt(mv * f) + ' ' + cur;
-    $('gramVal').textContent = fmt(ppg * f) + ' ' + cur;
     var wr = $('workRow'), pr = $('pctRow');
     if (sp > 0 && mv > 0) {
       var work = sp / f - mv, pct = work / mv * 100;
