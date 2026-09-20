@@ -404,7 +404,7 @@ html, body { overflow-x: hidden; }
   </div>
 
   <footer><span data-i18n="foot">الأسعار إرشادية من السوق العالمي · سعر البيع بالمحل يختلف قليلاً · صنع بواسطة </span><a href="#">@alansari.tech</a>
-    <br><a class="tg-link" href="https://t.me/alansariteach" target="_blank" rel="noopener noreferrer"><span class="tg-ico"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span><span data-i18n="tg">قناتي على تلغرام للتواصل — @alansariteach</span></a></footer>
+    <br><a class="tg-link" href="https://t.me/alansariteach" data-tg="alansariteach" target="_blank" rel="noopener noreferrer"><span class="tg-ico"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span><span data-i18n="tg">تواصل معي على تلغرام — @alansariteach</span></a></footer>
 </div>
 
 <script>
@@ -687,7 +687,7 @@ html, body { overflow-x: hidden; }
       lowTpl: 'سعر البائع أقل من قيمة المعدن بـ <b class="num">{w}</b>. غالباً خطأ بالوزن أو العيار — تحقق من القطعة.',
       lastUpdate: 'آخر تحديث: ', auto: ' · يتحدث تلقائياً كل 30 ثانية · الأسعار من السوق الدولي',
       foot: 'الأسعار إرشادية من السوق العالمي · سعر البيع بالمحل يختلف قليلاً · صنع بواسطة ',
-      tg: 'قناتي على تلغرام للتواصل — @alansariteach', intl: '🌍 دولي / غير ذلك'
+      tg: 'تواصل معي على تلغرام — @alansariteach', intl: '🌍 دولي / غير ذلك'
     },
     en: {
       brandG: 'Gold', brandS: '& Silver Calculator',
@@ -712,7 +712,7 @@ html, body { overflow-x: hidden; }
       lowTpl: 'The asking price is <b class="num">{w}</b> below the metal value. Usually a weight or karat mistake — check the piece.',
       lastUpdate: 'Last update: ', auto: ' · auto-refreshes every 30s · prices from the global market',
       foot: 'Indicative prices from the global market · shop prices may differ slightly · built by ',
-      tg: 'My Telegram channel — @alansariteach', intl: '🌍 International / other'
+      tg: 'Message me on Telegram — @alansariteach', intl: '🌍 International / other'
     }
   };
   function t(k) { return T[lang][k]; }
@@ -830,6 +830,21 @@ html, body { overflow-x: hidden; }
       if (d && d.rates && d.rates.USD) { fx = d.rates; prices(); calc(); }
     } catch (e) { /* نبقى على أسعار الصرف المحلية */ }
   }
+  (function telegramDeepLink() {
+    var a = document.querySelector('.tg-link');
+    if (!a) return;
+    var handle = a.getAttribute('data-tg');
+    if (!handle) return;
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var web = 'https://t.me/' + handle, app = 'tg://resolve?domain=' + handle, gone = false;
+      var timer = setTimeout(function () { gone = true; window.location.href = web; }, 1500);
+      function cancel() { if (!gone) { clearTimeout(timer); } }
+      window.addEventListener('blur', cancel, { once: true });
+      document.addEventListener('visibilitychange', function () { if (document.hidden) { cancel(); } }, { once: true });
+      window.location.href = app;
+    });
+  })();
   apply();
   fetchFx(); setInterval(fetchFx, 600000);
   refresh(); setInterval(tickCd, 1000);
