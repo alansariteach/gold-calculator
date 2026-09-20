@@ -107,8 +107,11 @@ html, body { overflow-x: hidden; }
   box-shadow: var(--shadow-raised);
   color: var(--ink-muted);
 }
-.gc-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--danger); animation: gc-pulse 1.5s infinite; }
+.gc-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--danger); animation: gc-pulse 1.5s infinite; flex: none; }
 .gc-live.ok .gc-dot { background: var(--success); box-shadow: 0 0 10px var(--success); }
+.gc-live-col { display: flex; flex-direction: column; line-height: 1.35; }
+.gc-cd { font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.gc-live.ok .gc-cd { color: var(--gold-500); }
 @keyframes gc-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 
 /* ---------- Ingot (CSS 3D) ---------- */
@@ -336,7 +339,7 @@ html, body { overflow-x: hidden; }
 <div class="wrap">
   <header>
     <h1 class="brand"><span class="g">حاسبة</span> <span class="s">الذهب والفضة</span></h1>
-    <span class="gc-live" id="live"><span class="gc-dot"></span><span id="liveText">جارٍ جلب السعر…</span></span>
+    <span class="gc-live" id="live"><span class="gc-dot"></span><span class="gc-live-col"><span id="liveText">السعر الحالي</span><span class="gc-cd" id="countdown">التحديث خلال 30 ث</span></span></span>
   </header>
 
   <section class="hero gc-hero">
@@ -451,16 +454,26 @@ html, body { overflow-x: hidden; }
   ['weight', 'seller', 'karat'].forEach(function (id) { $(id).oninput = calc; $(id).onchange = calc; });
   function setLive(ok, text) { $("live").classList.toggle("ok", ok); $("liveText").textContent = text; }
   async function fetchPrice(sym) { var r = await fetch("https://api.gold-api.com/price/" + sym); var d = await r.json(); return d.price; }
+  var COUNT = 30, left = COUNT, busy = false;
+  function paintCd() { $("countdown").textContent = busy ? "جارٍ التحديث…" : "التحديث خلال " + Math.max(left, 0) + " ث"; }
+  function tickCd() {
+    if (busy) return;
+    left--;
+    if (left <= 0) { left = COUNT; refresh(); }
+    paintCd();
+  }
   async function refresh() {
+    busy = true; paintCd();
     try {
       var res = await Promise.all([fetchPrice("XAU"), fetchPrice("XAG")]);
       spot.gold = res[0]; spot.silver = res[1];
-      setLive(true, "سعر مباشر — حي");
+      setLive(true, "السعر الحالي");
       $("lastUpdate").textContent = new Date().toLocaleTimeString("ar-SA");
       prices(); calc();
     } catch (e) { setLive(false, "تعذر جلب السعر…"); setTimeout(refresh, 8000); }
+    finally { busy = false; left = COUNT; paintCd(); }
   }
-  refresh(); setInterval(refresh, 30000);
+  refresh(); setInterval(tickCd, 1000);
 </script>
 </body>
 </html>
