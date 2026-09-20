@@ -367,8 +367,8 @@ html, body { overflow-x: hidden; }
   </section>
 
   <div class="prices">
-    <div class="gc-price gold"><div class="metal"><i></i><span id="goldTitle">الذهب · عيار 24</span></div><div class="val num" id="goldOz">—</div><div class="gram"><span id="goldGramLabel">غرام عيار 24:</span> <span class="num" id="goldGram">—</span></div></div>
-    <div class="gc-price silver"><div class="metal"><i></i><span data-i18n="silverOz">الفضة (الأونصة)</span></div><div class="val num" id="silverOz">—</div><div class="gram"><span data-i18n="gram">الغرام:</span> <span class="num" id="silverGram">—</span></div></div>
+    <div class="gc-price gold"><div class="metal"><i></i><span id="goldTitle">الذهب · عيار 24</span></div><div class="val num" id="goldOz">—</div></div>
+    <div class="gc-price silver"><div class="metal"><i></i><span data-i18n="silverOz">الفضة (الأونصة)</span></div><div class="val num" id="silverOz">—</div></div>
   </div>
 
   <div class="gc-tabs" role="tablist">
@@ -734,13 +734,10 @@ html, body { overflow-x: hidden; }
   function curKarat() { return parseFloat($('karat').value) || 24; }
   function prices() {
     if (spot.gold == null) return;
-    var kv = curKarat(), k = kv / 24, f = fx[cur];
+    var f = fx[cur];
     $('goldTitle').textContent = t('goldOzTitle');
-    $('goldGramLabel').textContent = t('gramOfK') + kv + t('gramOfEnd');
     $('goldOz').textContent = fmt(spot.gold * f) + ' ' + cur;
     $('silverOz').textContent = fmt(spot.silver * f) + ' ' + cur;
-    $('goldGram').textContent = fmt(spot.gold / OZ * k * f);
-    $('silverGram').textContent = fmt(spot.silver / OZ * f);
   }
   function verdict(state, chipKey, html) {
     var v = $('verdict'); v.className = 'gc-verdict ' + state; $('chip').textContent = t(chipKey); $('verdictText').innerHTML = html;
