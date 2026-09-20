@@ -344,8 +344,9 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   .lang-btn { font-size: 12px; font-weight: 700; letter-spacing: .06em; padding: 8px 13px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); background: var(--surface-100); color: var(--gold-300); cursor: pointer; transition: border-color 200ms, color 200ms; min-height: 36px; }
   .lang-btn:hover { border-color: var(--gold-500); color: var(--gold-100); }
   /* ---------- حقل البحث عن الدولة ---------- */
-  .gc-search { position: relative; display: flex; align-items: center; margin-bottom: var(--space-2); }
-  .gc-search .gc-search-ico { position: absolute; inset-inline-start: var(--space-3); width: 16px; height: 16px; color: var(--ink-faint); pointer-events: none; }
+  .gc-search { position: relative; }
+    .gc-field > span.gc-search { display: block; margin-bottom: var(--space-2); }
+    .gc-search .gc-search-ico { position: absolute; inset-inline-start: var(--space-3); top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--ink-faint); pointer-events: none; }
   .gc-field .gc-search input {
     direction: inherit; text-align: start; font-family: var(--font-sans); font-variant-numeric: normal;
     width: 100%; padding-block: var(--space-3); padding-inline: 40px var(--space-3); font-size: 16px;
