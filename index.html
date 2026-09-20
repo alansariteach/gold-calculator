@@ -216,6 +216,57 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .gc-price.silver .gc-spark-area { fill: var(--glow-silver); }
 .gc-trend.down b { }
 
+/* ---------- نافذة المؤشر ---------- */
+.gc-price { cursor: pointer; }
+.gc-price:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.gc-more { color: var(--ink-faint); font-size: 10.5px; margin-top: 3px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.gc-modal { position: fixed; inset: 0; z-index: 80; display: flex; align-items: flex-end; justify-content: center; }
+.gc-modal[hidden] { display: none; }
+body.gc-locked { overflow: hidden; }
+.gc-modal-bg { position: absolute; inset: 0; background: #000000b8; }
+.gc-modal-card {
+  position: relative; width: 100%; max-width: 660px; max-height: 94vh; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--grad-card); border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: var(--space-4) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+  box-shadow: var(--shadow-raised); animation: gc-up 200ms ease-out;
+}
+@keyframes gc-up { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.gc-modal-head { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); }
+.gc-modal-title { font-family: var(--font-display); font-weight: 700; font-size: 17px; flex: 1; display: flex; align-items: center; gap: var(--space-2); }
+.gc-modal-x { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--surface-100); color: var(--ink-muted); font-size: 15px; line-height: 1; cursor: pointer; }
+.gc-modal-x:hover { color: var(--ink); border-color: var(--gold-500); }
+.gc-modal-price { display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-3); }
+.gc-modal-price .big { font-size: 26px; font-weight: 700; color: var(--gold-500); }
+.gc-modal.silver .gc-modal-price .big { color: var(--silver-500); }
+.gc-chg { font-size: 13px; font-weight: 700; }
+.gc-chg.up { color: var(--success); }
+.gc-chg.down { color: var(--danger); }
+.gc-chips { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
+.gc-chip { flex: 1 0 auto; text-align: center; padding: 9px 10px; border-radius: var(--radius-md); border: 1px solid var(--line);
+  background: var(--surface-100); color: var(--ink-muted); cursor: pointer; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+.gc-chip:hover { color: var(--ink); border-color: var(--line-strong); }
+.gc-chip.on { background: var(--surface-200); color: var(--gold-500); border-color: var(--gold-700); }
+.gc-modal.silver .gc-chip.on { color: var(--silver-300); border-color: var(--silver-700); }
+.gc-chart-wrap { position: relative; background: var(--surface-well); border: 1px solid var(--line); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-well); padding: var(--space-2) var(--space-2) 4px; }
+.gc-chart { display: block; width: 100%; height: 190px; touch-action: pan-y; }
+.gc-grid { stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.gc-area { stroke: none; fill: var(--glow-gold); }
+.gc-line { fill: none; stroke: var(--gold-500); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.gc-modal.silver .gc-line { stroke: var(--silver-500); }
+.gc-modal.silver .gc-area { fill: var(--glow-silver); }
+.gc-ylab, .gc-xlab { fill: var(--ink-faint); font-size: 9.5px; font-family: var(--font-mono); direction: ltr; }
+.gc-cursor { stroke: var(--ink-faint); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
+.gc-dot { fill: var(--gold-500); stroke: var(--surface-000); stroke-width: 2; }
+.gc-modal.silver .gc-dot { fill: var(--silver-300); }
+.gc-tip { position: absolute; top: 6px; transform: translateX(-50%); background: var(--surface-200); border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm); padding: 4px 8px; font-size: 11.5px; color: var(--ink); pointer-events: none; white-space: nowrap; }
+.gc-chart-stats { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-3); color: var(--ink-muted); font-size: 12.5px; }
+.gc-chart-stats b { color: var(--ink); font-family: var(--font-mono); }
+.gc-chart-note { color: var(--ink-faint); font-size: 11px; margin-top: var(--space-2); line-height: 1.6; }
+.gc-chart-load { color: var(--ink-muted); font-size: 12.5px; text-align: center; padding: 26px 0; }
+
 /* ---------- MetalTabs ---------- */
 .gc-tabs { display: flex; gap: var(--space-2); }
 .gc-tab {
@@ -512,8 +563,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   </section>
 
   <div class="prices">
-    <div class="gc-price gold"><div class="metal"><i></i><span id="goldTitle">الذهب · عيار 24</span></div><div class="val num" id="goldOz">—</div><div class="gc-ind" id="goldInd" hidden></div></div>
-    <div class="gc-price silver"><div class="metal"><i></i><span data-i18n="silverOz">الفضة (الأونصة)</span></div><div class="val num" id="silverOz">—</div><div class="gc-ind" id="silverInd" hidden></div></div>
+    <div class="gc-price gold" id="goldCard" role="button" tabindex="0" aria-label="gold chart"><div class="metal"><i></i><span id="goldTitle">الذهب · عيار 24</span></div><div class="val num" id="goldOz">—</div><div class="gc-ind" id="goldInd" hidden></div><div class="gc-more" data-i18n="chartOpen">اضغط للمؤشر</div></div>
+    <div class="gc-price silver" id="silverCard" role="button" tabindex="0" aria-label="silver chart"><div class="metal"><i></i><span data-i18n="silverOz">الفضة (الأونصة)</span></div><div class="val num" id="silverOz">—</div><div class="gc-ind" id="silverInd" hidden></div><div class="gc-more" data-i18n="chartOpen">اضغط للمؤشر</div></div>
   </div>
 
   <div class="gc-tabs" role="tablist">
@@ -572,6 +623,24 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     </div>
   </div>
   <div class="gc-toast" id="geoToast" aria-live="polite"></div>
+
+  <div class="gc-modal gold" id="chartModal" hidden aria-hidden="true">
+    <div class="gc-modal-bg" id="chartBg"></div>
+    <div class="gc-modal-card" role="dialog" aria-modal="true" aria-labelledby="chartTitle">
+      <div class="gc-modal-head">
+        <span class="gc-modal-title" id="chartTitle"><span class="gc-mark"></span><span id="chartTitleTxt">المؤشر</span></span>
+        <button class="gc-modal-x" id="chartClose" type="button" data-i18n="chartClose" aria-label="close">&#10005;</button>
+      </div>
+      <div class="gc-modal-price"><span class="big num" id="chartPrice">&mdash;</span><span class="gc-chg num" id="chartChg"></span></div>
+      <div class="gc-chips" id="chartChips"></div>
+      <div class="gc-chart-wrap" id="chartWrap">
+        <svg class="gc-chart" id="chartSvg" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div class="gc-tip" id="chartTip" hidden></div>
+      </div>
+      <div class="gc-chart-stats" id="chartStats"></div>
+      <div class="gc-chart-note" data-i18n="chartNote">الرسم مبني على بيانات السوق العالمية (نقاط كل 5 دقائق) + قياسات مباشرة من الموقع. الرقم المعروض لك بالسعر الحالي.</div>
+    </div>
+  </div>
 
   <footer><span data-i18n="foot">الأسعار إرشادية من السوق العالمي · سعر البيع بالمحل يختلف قليلاً · صنع بواسطة </span><a href="https://www.instagram.com/alansari.tech/" target="_blank" rel="noopener noreferrer">@alansari.tech</a>
     <br><a class="tg-link" href="https://t.me/Alansaritech" data-tg="Alansaritech" target="_blank" rel="noopener noreferrer"><span class="tg-ico"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></span><span data-i18n="tg">تواصل معي على تلغرام — @alansariteach</span></a></footer>
@@ -864,6 +933,12 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       perGram: ' للغرام',
       pctVal: 'نسبة المصنعية',
       trend7: 'خلال 7 أيام',
+      chartOpen: 'اضغط للمؤشر', chartClose: 'إغلاق',
+      chartGold: 'الذهب', chartSilver: 'الفضة',
+      r5m: '5 دقائق', r15m: '15 دقيقة', r1h: 'ساعة', r7d: 'أسبوع', r30d: 'شهر',
+      chartHigh: 'أعلى', chartLow: 'أدنى', chartChg: 'التغير', chartNow: 'الآن',
+      chartLoading: 'نجمع بيانات المؤشر…', chartNone: 'ما فيه بيانات كافية لهذي المدة بعد — جرّب مدة أطول.',
+      chartNote: 'الرسم مبني على بيانات السوق العالمية (نقاط كل 5 دقائق) + قياسات مباشرة من الموقع أثناء التصفح. السعر المعروض هو السعر الحالي.',
       chipHow: 'كيف تستخدمه', chipGood: 'منطقية', chipWarn: 'فاصِل', chipBad: 'مرتفعة', chipCheck: 'تحقق',
       howText: 'قل للبائع «كم الوزن وكم العيار» → سجّلهما هنا، ثم اكتب السعر اللي قاله لك. الموقع يحسب قيمة المعدن الصافي ويوضح لك كم المصنعية، فتقرر تفاصل أو تمشي.',
       workTpl: 'البائع يعرض مصنعية <b class="num">{w}</b> على القطعة كاملة، أي <b class="num">{g}</b> ({p}% من قيمة المعدن). ',
@@ -903,6 +978,12 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       perGram: ' per gram',
       pctVal: 'Making charge %',
       trend7: 'over 7 days',
+      chartOpen: 'Tap for the chart', chartClose: 'Close',
+      chartGold: 'Gold', chartSilver: 'Silver',
+      r5m: '5 min', r15m: '15 min', r1h: '1 hour', r7d: 'Week', r30d: 'Month',
+      chartHigh: 'High', chartLow: 'Low', chartChg: 'Change', chartNow: 'now',
+      chartLoading: 'Loading chart data…', chartNone: 'Not enough data for this range yet — try a longer range.',
+      chartNote: 'Built from global market data (5-minute points) plus live samples taken while you browse. The headline figure is the current price.',
       chipHow: 'How to use', chipGood: 'Fair', chipWarn: 'Negotiate', chipBad: 'High', chipCheck: 'Check',
       howText: 'Ask the seller for the weight and karat, enter them here, then type the quoted price. The site shows the real metal value and the making charge, so you decide whether to negotiate or walk away.',
       workTpl: 'The seller is asking <b class="num">{w}</b> making charge for the piece \u2014 that is <b class="num">{g}</b> ({p}% of the metal value). ',
@@ -1236,6 +1317,233 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     }).catch(function () { /* المؤشر إضافة تحسينية — نتجاهل الفشل */ });
   }
 
+  /* ---------- نافذة المؤشر التفاعلي ---------- */
+  var HIST_KEY = 'gcHist', HCACHE = {};
+  var RANGES = [
+    { k: '5m', ms: 5 * 60 * 1000, days: 1, ttl: 3 * 60 * 1000 },
+    { k: '15m', ms: 15 * 60 * 1000, days: 1, ttl: 3 * 60 * 1000 },
+    { k: '1h', ms: 60 * 60 * 1000, days: 1, ttl: 5 * 60 * 1000 },
+    { k: '7d', ms: 7 * 24 * 3600 * 1000, days: 7, ttl: 6 * 3600 * 1000 },
+    { k: '30d', ms: 30 * 24 * 3600 * 1000, days: 30, ttl: 6 * 3600 * 1000 }
+  ];
+  var chartKind = 'gold', chartRange = '7d', chartSeries = [], chartTs = [];
+  var chartIsOpen = false, chartTries = 0, chartTimer = null;
+
+  /* قياسات مباشرة من الموقع: نقطة كل 30 ثانية (نستفيد منها للمدد القصيرة) */
+  function histSamples() {
+    try { var a = JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); return (a && a.length) ? a : []; } catch (e) { return []; }
+  }
+  function recordSample() {
+    if (spot.gold == null) return;
+    try {
+      var a = histSamples(), now = Date.now();
+      if (a.length && (now - a[a.length - 1][0]) < 25000) { return; }
+      a.push([now, spot.gold, spot.silver]);
+      var cut = now - 40 * 3600 * 1000;
+      while (a.length && a[0][0] < cut) { a.shift(); }
+      if (a.length > 4000) { a = a.slice(-4000); }
+      localStorage.setItem(HIST_KEY, JSON.stringify(a));
+    } catch (e) {}
+  }
+  function histPoints(kind, from) {
+    var a = histSamples(), idx = kind === 'silver' ? 2 : 1, out = [];
+    for (var i = 0; i < a.length; i++) { if (a[i][0] >= from && a[i][idx] > 0) { out.push([a[i][0], a[i][idx]]); } }
+    return out;
+  }
+  function rangeCfg() {
+    for (var i = 0; i < RANGES.length; i++) { if (RANGES[i].k === chartRange) { return RANGES[i]; } }
+    return RANGES[3];
+  }
+  function fetchDays(kind, days, cb) {
+    var key = kind + days, now = Date.now(), ttl = days === 1 ? 3 * 60 * 1000 : 6 * 3600 * 1000;
+    if (HCACHE[key] && (now - HCACHE[key].t) < ttl) { cb(HCACHE[key].p); return; }
+    var stored = null;
+    try { stored = JSON.parse(localStorage.getItem('gcH' + key) || 'null'); } catch (e) {}
+    if (stored && stored.t && (now - stored.t) < ttl && stored.p && stored.p.length) { HCACHE[key] = stored; cb(stored.p); return; }
+    var cid = kind === 'silver' ? 'kinesis-silver' : 'pax-gold';
+    fetch('https://api.coingecko.com/api/v3/coins/' + cid + '/market_chart?vs_currency=usd&days=' + days)
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.prices || !res.prices.length) { throw new Error('empty'); }
+        var pts = res.prices.map(function (x) { return [x[0], x[1]]; });
+        HCACHE[key] = { t: Date.now(), p: pts };
+        try { localStorage.setItem('gcH' + key, JSON.stringify(HCACHE[key])); } catch (e) {}
+        cb(pts);
+      })
+      .catch(function () { cb(HCACHE[key] ? HCACHE[key].p : null); });
+  }
+  function buildSeries(kind, cfg, api) {
+    var from = Date.now() - cfg.ms, live = histPoints(kind, from), out = [];
+    if (api && api.length) {
+      for (var i = 0; i < api.length; i++) {
+        if (api[i][0] < from) { continue; }
+        var dup = false;
+        for (var j = 0; j < live.length; j++) { if (Math.abs(live[j][0] - api[i][0]) < 150000) { dup = true; break; } }
+        if (!dup) { out.push(api[i]); }
+      }
+    }
+    for (var k = 0; k < live.length; k++) { out.push(live[k]); }
+    out.sort(function (a, b) { return a[0] - b[0]; });
+    /* المدد القصيرة: نضم آخر النقاط قبل بداية المدة حتى يبقى الرسم مفيد */
+    if (out.length < 3 && api && api.length) {
+      var pre = [];
+      for (var q = api.length - 1; q >= 0 && pre.length < 3; q--) {
+        if (api[q][0] < from) { pre.unshift(api[q]); }
+      }
+      out = pre.concat(out);
+      if (!out.length) { out = api.slice(-3); }
+    }
+    return out;
+  }
+  function chartFmt(ts) {
+    var dt = new Date(ts), loc = lang === 'ar' ? 'ar-SA' : 'en-US';
+    if (rangeCfg().ms <= 2 * 24 * 3600 * 1000) { return dt.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' }); }
+    return dt.toLocaleDateString(loc, { day: 'numeric', month: 'numeric' });
+  }
+  function drawChart() {
+    var svg = $('chartSvg'), wrap = $('chartWrap');
+    if (!svg || !wrap) return;
+    var W = Math.max(260, wrap.clientWidth - 18), H = 190;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    if (!chartSeries.length) {
+      svg.innerHTML = '';
+      $('chartTip').hidden = true;
+      return;
+    }
+    var f = fxRate() || 1, cur3 = cur;
+    var rtl = document.documentElement.dir === 'rtl';
+    var padT = 14, padB = 20, padL = 8, padR = 8, plotW = W - padL - padR, plotH = H - padT - padB;
+    var vals = chartSeries.map(function (p) { return p[1]; });
+    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals), rng = (max - min) || (max * 0.001) || 1;
+    var lo = min - rng * 0.08, hi = max + rng * 0.08; rng = hi - lo;
+    function X(i) { return padL + (chartSeries.length > 1 ? (i / (chartSeries.length - 1)) * plotW : plotW / 2); }
+    function Y(v) { return padT + (1 - (v - lo) / rng) * plotH; }
+    var line = '', area = '';
+    for (var i = 0; i < chartSeries.length; i++) {
+      var cmd = (i ? 'L' : 'M') + X(i).toFixed(1) + ',' + Y(chartSeries[i][1]).toFixed(1);
+      line += cmd; area += cmd;
+    }
+    area += ' L' + X(chartSeries.length - 1).toFixed(1) + ',' + (H - padB) + ' L' + X(0).toFixed(1) + ',' + (H - padB) + ' Z';
+    var grid = '';
+    for (var g = 0; g <= 2; g++) {
+      var gy = padT + (g / 2) * plotH;
+      grid += '<line class="gc-grid" x1="' + padL + '" y1="' + gy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + gy.toFixed(1) + '"></line>';
+    }
+    var hiV = fmt(max * f), loV = fmt(min * f);
+    var hiY = Math.max(padT + 9, Y(max) - 6), loY = Math.min(H - padB - 3, Y(min) + 12);
+    var anchor = rtl ? 'end' : 'start', tx = rtl ? (W - padR - 2) : (padL + 2);
+    var labels = '<text class="gc-ylab" x="' + tx + '" y="' + hiY.toFixed(1) + '" text-anchor="' + anchor + '">' + hiV + '</text>' +
+                 '<text class="gc-ylab" x="' + tx + '" y="' + loY.toFixed(1) + '" text-anchor="' + anchor + '">' + loV + '</text>' +
+                 '<text class="gc-xlab" x="' + (rtl ? (W - padR) : padL) + '" y="' + (H - 6) + '" text-anchor="' + anchor + '">' + escapeHTML(chartFmt(chartSeries[0][0])) + '</text>' +
+                 '<text class="gc-xlab" x="' + (rtl ? padL : (W - padR)) + '" y="' + (H - 6) + '" text-anchor="' + (rtl ? 'start' : 'end') + '">' + escapeHTML(t('chartNow')) + '</text>';
+    svg.innerHTML = '<path class="gc-area" d="' + area + '"></path>' + grid +
+      '<line class="gc-cursor" id="chartCursor" x1="0" y1="' + padT + '" x2="0" y2="' + (H - padB) + '" style="display:none"></line>' +
+      '<path class="gc-line" d="' + line + '"></path>' +
+      '<circle class="gc-dot" id="chartDot" r="4" cx="0" cy="0" style="display:none"></circle>' + labels;
+    svg._geo = { W: W, H: H, padL: padL, padT: padT, padB: padB, plotW: plotW, plotH: plotH, lo: lo, rng: rng, X: X, Y: Y, f: f };
+  }
+  function chartStats() {
+    var box = $('chartStats');
+    if (!box) return;
+    if (!chartSeries.length) { box.innerHTML = ''; box.innerHTML = '<span>' + escapeHTML(t('chartNone')) + '</span>'; return; }
+    var f = fxRate() || 1, cfg = rangeCfg();
+    var vals = chartSeries.map(function (x) { return x[1]; });
+    var first = vals[0], last = vals[vals.length - 1], chg = first ? ((last - first) / first) * 100 : 0;
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+    var cls = chg >= 0 ? 'up' : 'down';
+    var cp = $('chartChg');
+    cp.className = 'gc-chg num ' + cls;
+    cp.textContent = (chg >= 0 ? '\u25B2 +' : '\u25BC ') + fmt(Math.abs(chg)) + '%';
+    $('chartPrice').textContent = fmt((spot[chartKind] == null ? last : spot[chartKind]) * f) + ' ' + cur;
+    $('chartTitleTxt').textContent = (chartKind === 'silver' ? t('chartSilver') : t('chartGold')) + ' \u00b7 ' + t('r' + cfg.k);
+    $('chartStats').innerHTML =
+      '<span>' + escapeHTML(t('chartHigh')) + ' <b>' + fmt(mx * f) + '</b></span>' +
+      '<span>' + escapeHTML(t('chartLow')) + ' <b>' + fmt(mn * f) + '</b></span>' +
+      '<span>' + escapeHTML(t('chartChg')) + ' <b>' + (chg >= 0 ? '+' : '') + fmt(chg) + '%</b></span>' +
+      '<span>' + escapeHTML(chartFmt(chartSeries[0][0])) + ' \u2192 ' + escapeHTML(chartFmt(chartSeries[chartSeries.length - 1][0])) + '</span>';
+  }
+  function buildChips() {
+    var box = $('chartChips');
+    box.innerHTML = RANGES.map(function (r) {
+      return '<button type="button" class="gc-chip' + (r.k === chartRange ? ' on' : '') + '" data-r="' + r.k + '">' + escapeHTML(t('r' + r.k)) + '</button>';
+    }).join('');
+    var btns = box.querySelectorAll('.gc-chip');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () { setRange(this.getAttribute('data-r')); });
+    }
+  }
+  function setRange(k) {
+    chartRange = k; chartTries = 0;
+    buildChips();
+    chartSeries = buildSeries(chartKind, rangeCfg(), HCACHE[chartKind + rangeCfg().days] ? HCACHE[chartKind + rangeCfg().days].p : null);
+    drawChart(); chartStats();
+    fetchDays(chartKind, rangeCfg().days, function (api) {
+      chartSeries = buildSeries(chartKind, rangeCfg(), api);
+      drawChart(); chartStats();
+    });
+  }
+  function openChart(kind) {
+    chartKind = kind; chartIsOpen = true;
+    var m = $('chartModal');
+    m.className = 'gc-modal ' + kind;
+    m.hidden = false; m.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('gc-locked');
+    chartSeries = []; chartStats();
+    $('chartStats').innerHTML = '<span>' + escapeHTML(t('chartLoading')) + '</span>';
+    setRange(chartRange);
+    if (!chartTimer) { chartTimer = setInterval(function () { if (chartIsOpen) { setRange(chartRange); } }, 30000); }
+  }
+  function closeChart() {
+    chartIsOpen = false;
+    var m = $('chartModal'); m.hidden = true; m.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('gc-locked');
+    $('chartTip').hidden = true;
+  }
+  (function chartUI() {
+    var gm = $('goldCard'), sm = $('silverCard');
+    function bind(el, kind) {
+      if (!el) return;
+      el.addEventListener('click', function () { openChart(kind); });
+      el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openChart(kind); } });
+    }
+    bind(gm, 'gold'); bind(sm, 'silver');
+    $('chartClose').addEventListener('click', closeChart);
+    $('chartBg').addEventListener('click', closeChart);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && chartIsOpen) { closeChart(); } });
+    var wrap = $('chartWrap'), tip = $('chartTip');
+    function move(clientX) {
+      if (!chartSeries.length || !$('chartSvg')._geo) return;
+      var svg = $('chartSvg'), geo = svg._geo, r = svg.getBoundingClientRect();
+      var scale = r.width / geo.W;
+      var x = (clientX - r.left) / scale;
+      var i = Math.round(((x - geo.padL) / geo.plotW) * (chartSeries.length - 1));
+      if (i < 0) i = 0; if (i > chartSeries.length - 1) i = chartSeries.length - 1;
+      var cx = geo.X(i), cy = geo.Y(chartSeries[i][1]);
+      var cur1 = $('chartCursor'), dot = $('chartDot');
+      cur1.setAttribute('x1', cx); cur1.setAttribute('x2', cx); cur1.style.display = '';
+      dot.setAttribute('cx', cx); dot.setAttribute('cy', cy); dot.style.display = '';
+      tip.hidden = false;
+      tip.textContent = fmt(chartSeries[i][1] * geo.f) + ' ' + cur + ' \u00b7 ' + chartFmt(chartSeries[i][0]);
+      var px = (cx * scale) + (r.left - wrap.getBoundingClientRect().left);
+      tip.style.left = Math.min(Math.max(px, 44), wrap.clientWidth - 44) + 'px';
+    }
+    function hide() {
+      $('chartTip').hidden = true;
+      var c = $('chartCursor'), dt = $('chartDot');
+      if (c) c.style.display = 'none';
+      if (dt) dt.style.display = 'none';
+    }
+    svgMove(wrap, move, hide);
+    window.addEventListener('resize', function () { if (chartIsOpen) { drawChart(); chartStats(); } });
+  })();
+  function svgMove(wrap, move, hide) {
+    wrap.addEventListener('mousemove', function (e) { move(e.clientX); });
+    wrap.addEventListener('mouseleave', hide);
+    wrap.addEventListener('touchstart', function (e) { if (e.touches[0]) move(e.touches[0].clientX); }, { passive: true });
+    wrap.addEventListener('touchmove', function (e) { if (e.touches[0]) move(e.touches[0].clientX); }, { passive: true });
+    wrap.addEventListener('touchend', function () { setTimeout(hide, 1200); });
+  }
+
   function apply() {
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -1277,7 +1585,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     try {
       var res = await Promise.all([fetchPrice("XAU"), fetchPrice("XAG")]);
       spot.gold = res[0]; spot.silver = res[1];
-      setLive(true, t('live'));
+      setLive(true, t('live'));
+      recordSample();
       $("lastUpdate").textContent = new Date().toLocaleTimeString(lang === 'ar' ? "ar-SA" : "en-US");
       prices(); calc();
     } catch (e) { setLive(false, t('liveErr')); setTimeout(refresh, 8000); }
