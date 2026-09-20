@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>حاسبة الذهب والفضة | اعرف المصنعية قبل ما تشتري</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=IBM+Plex+Mono:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=IBM+Plex+Mono:wght@600;700&display=swap">
 <style>
 /* tokens */
 :root {
@@ -59,7 +59,7 @@
   --tilt-ingot: 58deg;
   --lift-hover: -3px;
   --depth-ingot: 56px;
-  --font-display: "Readex Pro", "Cairo", "Segoe UI", Tahoma, sans-serif;
+  --font-display: "Aref Ruqaa", "El Messiri", "Readex Pro", "Segoe UI", Tahoma, sans-serif;
   --font-sans: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
   --font-mono: "IBM Plex Mono", "Courier New", monospace;
   --font-figure: "Amiri", "Cormorant Garamond", Georgia, serif;
@@ -548,6 +548,98 @@ body.gc-locked { overflow: hidden; }
     .gc-bars { padding-top: 0; }
   }
 
+
+/* ================= THEME B · DAMASCENE REGAL ================= */
+:root {
+  --surface-000: #0a0705;
+  --surface-100: #130e08;
+  --surface-200: #1b1309;
+  --surface-well: #0a0705;
+  --line: #c8963c47;
+  --line-strong: #c8963c80;
+  --ink: #f6efe2;
+  --ink-muted: #c0ab84;
+  --ink-faint: #8f8267;
+  --gold-100: #fbf0d4;
+  --gold-300: #f8e6b4;
+  --gold-500: #f0cf7a;
+  --gold-700: #cfa63c;
+  --gold-900: #6b5119;
+  --silver-100: #f8f3e9;
+  --silver-300: #e2d8c5;
+  --silver-500: #c0b49b;
+  --silver-700: #8a7c60;
+  --on-gold: #1a1206;
+  --on-silver: #1a1610;
+  --glow-gold: #f0cf7a33;
+  --glow-silver: #c0b49b26;
+  --grad-gold: linear-gradient(180deg, #f8e6b4, #cfa63c);
+  --grad-silver: linear-gradient(180deg, #e6ddc9, #a99b7c);
+  --grad-card: linear-gradient(180deg, #151009, #0d0906);
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --shadow-raised: inset 0 0 24px #f0cf7a0f, 0 10px 30px #000000b3;
+  --shadow-well: inset 0 2px 8px #000000cc;
+  --shadow-gold-button: inset 0 1px 0 #fbf0d4cc, 0 8px 20px #f0cf7a33;
+  --shadow-silver-button: inset 0 1px 0 #f8f3e9cc, 0 8px 20px #c0b49b26;
+  --shadow-gold-glow: 0 0 18px #f0cf7a4d;
+  --shadow-focus: 0 0 0 3px #f0cf7a33, inset 0 2px 6px #000000b3;
+}
+body { background-color: var(--surface-000); }
+/* شريط ذهبي أعلى الصفحة */
+body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 4px; z-index: 65;
+  background: linear-gradient(90deg, #3a2a0d, #f0cf7a 45%, #8a6a1f 60%, #f0cf7a); }
+html[dir="ltr"] body::before { background: linear-gradient(90deg, #f0cf7a, #8a6a1f 40%, #f0cf7a 55%, #3a2a0d); }
+.wrap { padding-top: 20px; }
+/* فاصل زخرفي */
+.gc-orn { text-align: center; color: #8a6a1f; font-size: 12px; letter-spacing: .7em; padding-inline-start: .7em; margin: 8px 0 2px; }
+/* البراند */
+.brand { color: var(--gold-500); letter-spacing: .01em; }
+.brand .g { color: var(--gold-500); text-shadow: 0 0 20px #f0cf7a59; }
+.brand .s { color: var(--ink); }
+.hero h2 { color: var(--ink); text-shadow: 0 2px 18px #00000099; }
+/* بطاقات السعر: إطار ذهبي مزدوج */
+.gc-price { border: 1px solid var(--line-strong); border-radius: var(--radius-lg); background: var(--grad-card);
+  box-shadow: inset 0 0 26px #f0cf7a0f, 0 10px 30px #000000b3; }
+.gc-price::after { content: ""; position: absolute; inset: 4px; border: 1px solid #c8963c26; border-radius: 3px; pointer-events: none; }
+.gc-price .metal { color: var(--ink-muted); letter-spacing: .09em; }
+.gc-card, .gc-result { border: 1px solid var(--line); background: var(--grad-card); }
+.gc-card::after { content: ""; position: absolute; inset: 5px; border: 1px solid #c8963c1f; border-radius: 3px; pointer-events: none; }
+.gc-card { position: relative; overflow: hidden; }
+.gc-result::after { content: ""; position: absolute; inset: 5px; border: 1px solid #c8963c2e; border-radius: 3px; pointer-events: none; }
+.gc-result { border-color: var(--line-strong); }
+/* العناوين بخط الرقعة الداخلي */
+.gc-card h2, .gc-modal-title, .gc-geo-txt strong { color: var(--gold-500); font-weight: 700; }
+.gc-mark { background: var(--gold-500); box-shadow: 0 0 14px #f0cf7a80; }
+/* الأزرار والقوائم */
+.gc-btn.primary { color: var(--on-gold); }
+.gc-tab { border-color: var(--line); background: #100c07; color: var(--ink-muted); }
+.gc-tab:hover { background: #1a1309; color: var(--ink); }
+.gc-tab.active.gold { color: var(--on-gold); }
+.gc-tab.active.silver { color: var(--on-silver); }
+.gc-field input, .gc-field select { border-color: var(--line); background: var(--surface-well); color: var(--ink); }
+.gc-field > span { color: var(--ink-muted); }
+.gc-units { background: #0d0a06; border-color: var(--line); }
+.gc-unit.on { background: #1e1609; color: var(--gold-500); border-color: var(--line-strong); }
+/* شريط الحكم */
+.gc-verdict { background: #0e0a06; border: 1px solid var(--line); border-inline-start: 3px solid var(--gold-500); border-radius: 4px; }
+.gc-verdict b { color: var(--gold-300); }
+/* نافذة المؤشر */
+.gc-modal-card { border: 1px solid var(--line-strong); background: var(--grad-card); }
+.gc-chip { background: #100c07; border-color: var(--line); }
+.gc-chip.on { background: #1e1609; color: var(--gold-500); border-color: var(--line-strong); }
+.gc-chart-wrap { background: var(--surface-well); border-color: var(--line); }
+.gc-combo-btn, .gc-combo-panel { border-color: var(--line); }
+.gc-combo-item:hover, .gc-combo-item.active { background: #1a1309; }
+.gc-combo-item.sel { box-shadow: inset 0 0 0 1px var(--line-strong); }
+.gc-combo-panel { background: #100c07; }
+/* شريط تحديد الموقع */
+.gc-geo { background: #0f0b06; border-top: 1px solid var(--line-strong); box-shadow: 0 -10px 30px #000000b3; }
+.gc-toast { background: #1b1309; border-color: var(--line-strong); }
+footer { border-top: 1px solid var(--line); }
+
 </style>
 </head>
 <body class="gc">
@@ -557,6 +649,7 @@ body.gc-locked { overflow: hidden; }
     <span class="gc-live" id="live"><span class="gc-dot"></span><span class="gc-live-col"><span id="liveText" data-i18n="live">السعر الحالي</span><span class="gc-cd" id="countdown"></span></span></span>
     <button class="lang-btn" id="langBtn" type="button" aria-label="Switch language">EN</button>
   </header>
+  <div class="gc-orn" aria-hidden="true">◆ ◆ ◆</div>
 
   <section class="hero gc-hero">
     <h2 data-i18n="heroH">احسب المصنعية قبل لا تشتري</h2>
