@@ -677,13 +677,19 @@ body::before { display: none; }              /* بلا شريط علوي داك�
 .gc-card h2, .gc-modal-title, .gc-geo-txt strong { color: #8a6a1f; }
 .gc-mark { background: #b8860b; box-shadow: none; }
 
-/* العملية (شراء/بيع) + خصم التاجر */
-.gc-mode { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; flex-wrap: wrap; }
-.gc-mode-lbl { color: #8d7c5d; font-size: 13px; }
-.gc-mode .gc-units { margin: 0; }
-.gc-mode .gc-unit { min-width: 64px; font-weight: 600; }
+/* شريط الإعدادات فوق الكارت: الدولة + العملية */
+.gc-prebar { display: flex; gap: 12px; align-items: flex-start; background: #fff; border: 1px solid #e8dcc2;
+  border-radius: var(--radius-lg); padding: 12px 14px; margin: 0 0 14px; box-shadow: 0 6px 18px #b8860b14; }
+.gc-prebar > .gc-row { flex: 1 1 56%; margin: 0; min-width: 0; }
+.gc-prebar > .gc-field { flex: 1 1 44%; margin: 0; min-width: 0; }
+.gc-mode { display: block; }
+.gc-mode-lbl { display: block; color: var(--ink-muted); margin-bottom: 6px; font-size: 12.5px; font-weight: 500; }
+.gc-mode .gc-unit { min-width: 0; font-weight: 600; }
 .gc-mode .gc-unit.on { background: linear-gradient(180deg, #c99a1a, #a97a12); color: #fff; border-color: #a97a12; }
-
+@media (max-width: 344px) {
+  .gc-prebar { flex-wrap: wrap; gap: 10px; }
+  .gc-prebar > .gc-row, .gc-prebar > .gc-field { flex: 1 1 100%; }
+}
 /* التبويبات + الحقول */
 .gc-tab { background: #f6f0e4; border-color: #e5d9bf; color: #8d7c5d; box-shadow: none; }
 .gc-tab:hover { background: #f1e8d6; color: #3b3227; }
@@ -789,8 +795,7 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
     <div class="gc-tab silver" role="tab" data-metal="silver" data-i18n="tabSilver">فضة</div>
   </div>
 
-  <div class="gc-card">
-    <h2><span class="gc-mark"></span><span data-i18n="calcTitle">احسب قيمة القطعة</span></h2>
+  <div class="gc-prebar" id="prebar">
     <div class="gc-row">
       <div class="gc-field" id="countryField">
         <span data-i18n="country">الدولة</span>
@@ -809,13 +814,16 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
         </div>
       </div>
     </div>
-    <div class="gc-mode">
+    <div class="gc-field gc-mode">
       <span class="gc-mode-lbl" data-i18n="modeLbl">العملية</span>
       <span class="gc-units" id="mode" role="group">
         <button type="button" class="gc-unit on" data-mode="buy" data-i18n="modeBuy">أشتري</button>
         <button type="button" class="gc-unit" data-mode="sell" data-i18n="modeSell">أبيع</button>
       </span>
     </div>
+  </div>
+  <div class="gc-card">
+    <h2><span class="gc-mark"></span><span data-i18n="calcTitle">احسب قيمة القطعة</span></h2>
     <div class="gc-row">
       <label class="gc-field" id="karatField"><span data-i18n="karat">العيار</span>
         <select id="karat"><option value="24">24</option><option value="22">22</option><option value="21" selected>21</option><option value="18">18</option></select>
