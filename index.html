@@ -324,6 +324,8 @@ body.gc-locked { overflow: hidden; }
 .gc-tab:active { transform: translateY(1px); box-shadow: none; }
 
 /* ---------- Field ---------- */
+/* أي عنصر عليه hidden يختفي فعلاً — لازم !important لأن قواعد display:flex تسبقه */
+[hidden] { display: none !important; }
 .gc-field { display: block; }
 .gc-field > span { display: block; color: var(--ink-muted); margin-bottom: 6px; }
 .gc-field input, .gc-field select {
@@ -789,17 +791,7 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
 
   <div class="gc-card">
     <h2><span class="gc-mark"></span><span data-i18n="calcTitle">احسب قيمة القطعة</span></h2>
-    <div class="gc-mode">
-      <span class="gc-mode-lbl" data-i18n="modeLbl">العملية</span>
-      <span class="gc-units" id="mode" role="group">
-        <button type="button" class="gc-unit on" data-mode="buy" data-i18n="modeBuy">أشتري</button>
-        <button type="button" class="gc-unit" data-mode="sell" data-i18n="modeSell">أبيع</button>
-      </span>
-    </div>
     <div class="gc-row">
-      <label class="gc-field" id="karatField"><span data-i18n="karat">العيار</span>
-        <select id="karat"><option value="24">24</option><option value="22">22</option><option value="21" selected>21</option><option value="18">18</option></select>
-      </label>
       <div class="gc-field" id="countryField">
         <span data-i18n="country">الدولة</span>
         <div class="gc-combo" id="countryCombo">
@@ -817,7 +809,17 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
         </div>
       </div>
     </div>
+    <div class="gc-mode">
+      <span class="gc-mode-lbl" data-i18n="modeLbl">العملية</span>
+      <span class="gc-units" id="mode" role="group">
+        <button type="button" class="gc-unit on" data-mode="buy" data-i18n="modeBuy">أشتري</button>
+        <button type="button" class="gc-unit" data-mode="sell" data-i18n="modeSell">أبيع</button>
+      </span>
+    </div>
     <div class="gc-row">
+      <label class="gc-field" id="karatField"><span data-i18n="karat">العيار</span>
+        <select id="karat"><option value="24">24</option><option value="22">22</option><option value="21" selected>21</option><option value="18">18</option></select>
+      </label>
       <label class="gc-field"><span data-i18n="weight">الوزن</span>
         <span class="gc-units" id="units" role="group">
           <button type="button" class="gc-unit on" data-u="1" data-i18n="unitG">غرام</button>
@@ -825,6 +827,8 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
           <button type="button" class="gc-unit" data-u="1000" data-i18n="unitKg">كيلو</button>
         </span>
         <input type="number" id="weight" value="10" min="0" step="0.001" inputmode="decimal"></label>
+    </div>
+    <div class="gc-row">
       <label class="gc-field"><span id="sellerLbl" data-i18n="seller">سعر البائع المعلن للقطعة</span><input type="number" id="seller" value="0" min="0" step="0.001" inputmode="decimal"><span class="hint" id="sellerHintEl" style="font-size:12px" data-i18n="sellerHint">اختياري — لحساب المصنعية</span></label>
     </div>
     <div class="gc-row" id="discWrap" hidden>
@@ -840,7 +844,6 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
         <span class="hint" style="font-size:12px" data-i18n="discHint">لا توجد نسبة ثابتة — تختلف من محل لمحل حسب نوع القطعة وحالة السوق.</span>
       </label>
     </div>
-
     <div class="gc-result" id="result">
       <div class="total num" id="total">—</div>
       <div class="line"><span class="lbl" id="metalValLbl" data-i18n="metalVal">قيمة المعدن الصافي (بدون مصنعية)</span><span class="val num" id="metalVal">—</span></div>
