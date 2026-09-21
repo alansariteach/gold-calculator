@@ -734,6 +734,8 @@ body::before { display: none; }              /* بلا شريط علوي داك�
 /* قائمة الدول */
 .gc-combo-btn { background: #fbf7ee; border-color: #e5d9bf; color: #3b3227; box-shadow: var(--shadow-well); }
 .gc-combo-panel { background: #fff; border-color: #e8dcc2; box-shadow: 0 12px 30px #b8860b1f; }
+/* القائمة أعرض من الخانة عشان أسماء الدول ما تنقص */
+.gc-combo-panel { inset-inline: auto; inset-inline-start: 0; min-width: 100%; width: max-content; max-width: min(340px, 92vw); }
 .gc-combo-search input { background: #fbf7ee; border-color: #e5d9bf; color: #3b3227; }
 .gc-combo-item { color: #3b3227; }
 .gc-combo-item:hover, .gc-combo-item.active { background: #f6f0e4; }
