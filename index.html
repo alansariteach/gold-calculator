@@ -675,6 +675,13 @@ body::before { display: none; }              /* بلا شريط علوي داك�
 .gc-card h2, .gc-modal-title, .gc-geo-txt strong { color: #8a6a1f; }
 .gc-mark { background: #b8860b; box-shadow: none; }
 
+/* العملية (شراء/بيع) + خصم التاجر */
+.gc-mode { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; flex-wrap: wrap; }
+.gc-mode-lbl { color: #8d7c5d; font-size: 13px; }
+.gc-mode .gc-units { margin: 0; }
+.gc-mode .gc-unit { min-width: 64px; font-weight: 600; }
+.gc-mode .gc-unit.on { background: linear-gradient(180deg, #c99a1a, #a97a12); color: #fff; border-color: #a97a12; }
+
 /* التبويبات + الحقول */
 .gc-tab { background: #f6f0e4; border-color: #e5d9bf; color: #8d7c5d; box-shadow: none; }
 .gc-tab:hover { background: #f1e8d6; color: #3b3227; }
@@ -782,6 +789,13 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
 
   <div class="gc-card">
     <h2><span class="gc-mark"></span><span data-i18n="calcTitle">احسب قيمة القطعة</span></h2>
+    <div class="gc-mode">
+      <span class="gc-mode-lbl" data-i18n="modeLbl">العملية</span>
+      <span class="gc-units" id="mode" role="group">
+        <button type="button" class="gc-unit on" data-mode="buy" data-i18n="modeBuy">أشتري</button>
+        <button type="button" class="gc-unit" data-mode="sell" data-i18n="modeSell">أبيع</button>
+      </span>
+    </div>
     <div class="gc-row">
       <label class="gc-field" id="karatField"><span data-i18n="karat">العيار</span>
         <select id="karat"><option value="24">24</option><option value="22">22</option><option value="21" selected>21</option><option value="18">18</option></select>
@@ -811,7 +825,20 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
           <button type="button" class="gc-unit" data-u="1000" data-i18n="unitKg">كيلو</button>
         </span>
         <input type="number" id="weight" value="10" min="0" step="0.001" inputmode="decimal"></label>
-      <label class="gc-field"><span data-i18n="seller">سعر البائع المعلن للقطعة</span><input type="number" id="seller" value="0" min="0" step="0.001" inputmode="decimal"><span class="hint" style="font-size:12px" data-i18n="sellerHint">اختياري — لحساب المصنعية</span></label>
+      <label class="gc-field"><span id="sellerLbl" data-i18n="seller">سعر البائع المعلن للقطعة</span><input type="number" id="seller" value="0" min="0" step="0.001" inputmode="decimal"><span class="hint" id="sellerHintEl" style="font-size:12px" data-i18n="sellerHint">اختياري — لحساب المصنعية</span></label>
+    </div>
+    <div class="gc-row" id="discWrap" hidden>
+      <label class="gc-field"><span data-i18n="discLbl">خصم التاجر المتوقع</span>
+        <span class="gc-units" id="discs" role="group">
+          <button type="button" class="gc-unit" data-d="0">0%</button>
+          <button type="button" class="gc-unit" data-d="1">1%</button>
+          <button type="button" class="gc-unit" data-d="2">2%</button>
+          <button type="button" class="gc-unit on" data-d="3">3%</button>
+          <button type="button" class="gc-unit" data-d="5">5%</button>
+          <button type="button" class="gc-unit" data-d="7">7%</button>
+        </span>
+        <span class="hint" style="font-size:12px" data-i18n="discHint">لا توجد نسبة ثابتة — تختلف من محل لمحل حسب نوع القطعة وحالة السوق.</span>
+      </label>
     </div>
 
     <div class="gc-result" id="result">
@@ -820,6 +847,8 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
       <div class="line" id="workRow" hidden><span class="lbl" data-i18n="workVal">المصنعية على القطعة كاملة</span><span class="val num" id="workVal">—</span></div>
       <div class="line" id="workGramRow" hidden><span class="lbl" data-i18n="workGramVal">المصنعية على الغرام الواحد</span><span class="val" id="workGramVal">—</span></div>
       <div class="line" id="pctRow" hidden><span class="lbl" data-i18n="pctVal">نسبة المصنعية</span><span class="val num" id="pctVal">—</span></div>
+      <div class="line" id="discValRow" hidden><span class="lbl" data-i18n="discRow">خصم التاجر</span><span class="val num" id="discVal">—</span></div>
+      <div class="line" id="lostRow" hidden><span class="lbl" data-i18n="lostLbl">المصنعية اللي دفعت — ما تُسترد</span><span class="val num" id="lostVal">—</span></div>
     </div>
 
     <div class="gc-verdict info" id="verdict"><span class="chip" id="chip">كيف تستخدمه</span><p id="verdictText">قل للبائع «كم الوزن وكم العيار» → سجّلهما هنا، ثم اكتب السعر اللي قاله لك. الموقع يحسب قيمة المعدن الصافي ويوضح لك كم المصنعية، فتقرر تفاصل أو تمشي.</p></div>
@@ -1112,7 +1141,7 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
 ["HK","هونغ كونغ","HKD","Hong Kong"],
 ["WF","واليس وفوتونا","XPF","Wallis and Futuna"]
 ];
-  var lang = 'ar', metal = 'gold', cur = 'USD', wUnit = 1;
+  var lang = 'ar', metal = 'gold', cur = 'USD', wUnit = 1, mode = 'buy', disc = 3;
   var $ = function (id) { return document.getElementById(id); };
   function flagOf(iso) { return iso.replace(/./g, function (ch) { return String.fromCodePoint(0x1F1E6 + ch.charCodeAt(0) - 65); }); }
   function fmt(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
@@ -1140,6 +1169,15 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
       geoBlocked: 'المتصفح رفض صلاحية الموقع. اختر دولتك يدوياً.',
       geoNoSupport: 'جهازك لا يدعم تحديد الموقع. اختر دولتك يدوياً.',
       seller: 'سعر البائع المعلن للقطعة', sellerHint: 'اختياري — لحساب المصنعية',
+      sellerSell: 'سعر شرائك الأصلي للقطعة', sellerHintSell: 'اختياري — لحساب خسارة المصنعية',
+      modeLbl: 'العملية', modeBuy: 'أشتري', modeSell: 'أبيع',
+      discLbl: 'خصم التاجر المتوقع',
+      discHint: 'لا توجد نسبة ثابتة — تختلف من محل لمحل حسب نوع القطعة وحالة السوق.',
+      discRow: 'خصم التاجر ({d}%)',
+      lostLbl: 'المصنعية اللي دفعت — ما تُسترد',
+      chipSell: 'وضع البيع',
+      sellTpl: 'الصافي المتوقع من المحل <b class="num">{n}</b> (بعد خصم {d}% من قيمة المعدن). ',
+      sellText: 'قارن عرضين أو ثلاثة قبل البيع. والأحجار والقطع غير الذهبية تُستبعد من الوزن، والتبديل بقطعة جديدة يعطيك سعراً أفضل عادة.',
       metalVal: 'قيمة المعدن الصافي (بدون مصنعية)',
       metalValGold: 'قيمة الذهب الصافي (بدون مصنعية)',
       metalValSilver: 'قيمة الفضة الصافية (بدون مصنعية)',
@@ -1188,6 +1226,15 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
       geoBlocked: 'Location permission was blocked. Pick your country from the list.',
       geoNoSupport: 'Your device does not support location. Pick your country from the list.',
       seller: 'Seller\u2019s asking price', sellerHint: 'Optional — reveals the making charge',
+      sellerSell: 'What you originally paid', sellerHintSell: 'Optional — shows your loss',
+      modeLbl: 'Transaction', modeBuy: 'Buying', modeSell: 'Selling',
+      discLbl: 'Expected dealer discount',
+      discHint: 'No fixed rate — it varies by shop, piece type and market conditions.',
+      discRow: 'Dealer discount ({d}%)',
+      lostLbl: 'Making charge you paid — not recovered',
+      chipSell: 'Selling',
+      sellTpl: 'The shop should pay about <b class="num">{n}</b> net (after a {d}% deduction from metal value). ',
+      sellText: 'Compare two or three offers before selling. Stones and non-gold parts are excluded from weight, and trading in for a new piece usually gets a better rate.',
       metalVal: 'Net metal value (no making charge)',
       metalValGold: 'Net gold value (no making charge)',
       metalValSilver: 'Net silver value (no making charge)',
@@ -1362,7 +1409,19 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
     $('total').textContent = fmt(mv * f) + ' ' + cur;
     $('metalVal').textContent = fmt(mv * f) + ' ' + cur;
     seoText();
-    var wr = $('workRow'), pr = $('pctRow');
+    var wr = $('workRow'), pr = $('pctRow'), grX = $('workGramRow'), drv = $('discValRow'), lrs = $('lostRow');
+    if (mode === 'sell') {
+      var dct = disc / 100, net = mv * (1 - dct);
+      $('total').textContent = fmt(net * f) + ' ' + cur;
+      if (drv) { drv.hidden = false; drv.className = 'line warn'; var dl = drv.querySelector('.lbl'); if (dl) { dl.textContent = t('discRow').replace('{d}', disc); } $('discVal').textContent = '\u2212' + fmt(mv * dct * f) + ' ' + cur; }
+      var spent = sp > 0 ? sp / f : 0;
+      if (lrs) { if (spent > mv) { lrs.hidden = false; lrs.className = 'line bad'; $('lostVal').textContent = '\u2212' + fmt((spent - mv) * f) + ' ' + cur; } else { lrs.hidden = true; } }
+      wr.hidden = pr.hidden = true; if (grX) { grX.hidden = true; }
+      verdict('info', 'chipSell', t('sellTpl').replace('{n}', fmt(net * f) + ' ' + cur).replace('{d}', disc) + t('sellText'));
+      return;
+    }
+    if (drv) { drv.hidden = true; }
+    if (lrs) { lrs.hidden = true; }
     if (sp > 0 && mv > 0) {
       var work = sp / f - mv, pct = work / mv * 100;
       if (work >= 0) {
@@ -1513,6 +1572,45 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
     }
   })();
   $('karat').addEventListener('change', prices);
+
+  /* ---------- وضع أشتري / أبيع + خصم التاجر ---------- */
+  function syncMode() {
+    var m = $('mode');
+    if (m) { var bs = m.querySelectorAll('.gc-unit'); for (var i = 0; i < bs.length; i++) { bs[i].classList.toggle('on', bs[i].getAttribute('data-mode') === mode); } }
+    var dw = $('discWrap'); if (dw) { dw.hidden = mode !== 'sell'; }
+    var sl = $('sellerLbl'), sh = $('sellerHintEl');
+    if (sl) { var k1 = mode === 'sell' ? 'sellerSell' : 'seller'; sl.setAttribute('data-i18n', k1); sl.textContent = t(k1); }
+    if (sh) { var k2 = mode === 'sell' ? 'sellerHintSell' : 'sellerHint'; sh.setAttribute('data-i18n', k2); sh.textContent = t(k2); }
+    var db = $('discs');
+    if (db) { var ds = db.querySelectorAll('.gc-unit'); for (var j = 0; j < ds.length; j++) { ds[j].classList.toggle('on', parseFloat(ds[j].getAttribute('data-d')) === disc); } }
+  }
+  (function modeBar() {
+    var m = $('mode');
+    if (m) {
+      var bs = m.querySelectorAll('.gc-unit');
+      try { var sm = localStorage.getItem('gcMode'); if (sm === 'sell' || sm === 'buy') { mode = sm; } } catch (e) {}
+      for (var i = 0; i < bs.length; i++) {
+        bs[i].addEventListener('click', function () {
+          mode = this.getAttribute('data-mode') || 'buy';
+          try { localStorage.setItem('gcMode', mode); } catch (e) {}
+          syncMode(); calc();
+        });
+      }
+    }
+    var db = $('discs');
+    if (db) {
+      var ds = db.querySelectorAll('.gc-unit');
+      try { var sd = parseFloat(localStorage.getItem('gcDisc')); if (sd >= 0) { disc = sd; } } catch (e) {}
+      for (var j = 0; j < ds.length; j++) {
+        ds[j].addEventListener('click', function () {
+          disc = parseFloat(this.getAttribute('data-d')) || 0;
+          try { localStorage.setItem('gcDisc', String(disc)); } catch (e) {}
+          syncMode(); calc();
+        });
+      }
+    }
+    syncMode();
+  })();
 
   /* ---------- مؤشر اتجاه الذهب والفضة (آخر 7 أيام) ---------- */
   var IND_KEY = 'gcInd', IND_TTL = 6 * 3600 * 1000, indData = null;
@@ -1811,7 +1909,7 @@ footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
         if (se) { se.placeholder = t('countrySearch'); se.setAttribute('aria-label', t('countrySearch')); }
     var cb = $('countryBtn');
     if (cb) { cb.setAttribute('aria-label', t('country')); }
-        buildCountries(); prices(); calc(); paintCd();
+        syncMode(); buildCountries(); prices(); calc(); paintCd();
     renderIndicators(indData);
     if (spot.gold != null) { seoText(); }
   }
