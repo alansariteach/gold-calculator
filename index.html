@@ -30,7 +30,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"حاسبة الذهب والفضة","alternateName":"Gold & Silver Calculator","url":"https://alansariteach.github.io/gold-calculator/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":["ar","en"],"isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"حاسبة مجانية لسعر الذهب والفضة: سعر الجرام اليوم لكل عيار، حساب قيمة القطعة والمصنعية بأي عملة، مع مؤشر حركة السعر.","featureList":["سعر الذهب والفضة المباشر","حساب سعر الجرام لكل عيار","حساب المصنعية ونسبة المصنعية","246 دولة و246 عملة","مؤشر حركة السعر 5 دقائق إلى شهر"],"publisher":{"@type":"Organization","name":"Alansari Tech","sameAs":["https://www.instagram.com/alansari.tech/","https://t.me/Alansaritech"]}}
 </script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=IBM+Plex+Mono:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap">
 <style>
 /* tokens */
 :root {
@@ -85,10 +85,10 @@
   --tilt-ingot: 58deg;
   --lift-hover: -3px;
   --depth-ingot: 56px;
-  --font-display: "Amiri", "El Messiri", "Readex Pro", "Segoe UI", Tahoma, sans-serif;
-  --font-sans: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
-  --font-mono: "IBM Plex Mono", "Courier New", monospace;
-  --font-figure: "Amiri", "Cormorant Garamond", Georgia, serif;
+  --font-display: "Readex Pro", "Segoe UI", Tahoma, sans-serif;
+  --font-sans: "Readex Pro", "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-mono: "Readex Pro", "Segoe UI", Tahoma, sans-serif;
+  --font-figure: "Readex Pro", "Segoe UI", Tahoma, sans-serif;
 }
 
 /* components */
@@ -586,104 +586,162 @@ body.gc-locked { overflow: hidden; }
   }
 
 
-/* ================= THEME B · DAMASCENE REGAL ================= */
+/* ================= THEME A · IVORY & GOLD (فاتح) ================= */
 :root {
-  --surface-000: #0a0705;
-  --surface-100: #130e08;
-  --surface-200: #1b1309;
-  --surface-well: #0a0705;
-  --line: #c8963c47;
-  --line-strong: #c8963c80;
-  --ink: #f6efe2;
-  --ink-muted: #c0ab84;
-  --ink-faint: #8f8267;
-  --gold-100: #fbf0d4;
-  --gold-300: #f8e6b4;
-  --gold-500: #f0cf7a;
-  --gold-700: #cfa63c;
+  --surface-000: #fdfaf4;   /* خلفية الصفحة */
+  --surface-100: #ffffff;   /* كروت */
+  --surface-200: #f6f0e4;   /* مرتفع */
+  --surface-well: #fbf7ee;  /* الحقول */
+  --line: #e8dcc2;
+  --line-strong: #d9c9a4;
+  --ink: #3b3227;
+  --ink-muted: #8d7c5d;
+  --ink-faint: #a99c85;
+  --gold-100: #f3dfa5;
+  --gold-300: #d9b757;
+  --gold-500: #b8860b;
+  --gold-700: #a97a12;
   --gold-900: #6b5119;
-  --silver-100: #f8f3e9;
-  --silver-300: #e2d8c5;
-  --silver-500: #c0b49b;
-  --silver-700: #8a7c60;
-  --on-gold: #1a1206;
-  --on-silver: #1a1610;
-  --glow-gold: #f0cf7a33;
-  --glow-silver: #c0b49b26;
-  --grad-gold: linear-gradient(180deg, #f8e6b4, #cfa63c);
-  --grad-silver: linear-gradient(180deg, #e6ddc9, #a99b7c);
-  --grad-card: linear-gradient(180deg, #151009, #0d0906);
-  --radius-sm: 3px;
-  --radius-md: 5px;
-  --radius-lg: 6px;
-  --radius-xl: 8px;
-  --shadow-raised: inset 0 0 24px #f0cf7a0f, 0 10px 30px #000000b3;
-  --shadow-well: inset 0 2px 8px #000000cc;
-  --shadow-gold-button: inset 0 1px 0 #fbf0d4cc, 0 8px 20px #f0cf7a33;
-  --shadow-silver-button: inset 0 1px 0 #f8f3e9cc, 0 8px 20px #c0b49b26;
-  --shadow-gold-glow: 0 0 18px #f0cf7a4d;
-  --shadow-focus: 0 0 0 3px #f0cf7a33, inset 0 2px 6px #000000b3;
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #b91c1c;
+  --silver-100: #ffffff;
+  --silver-300: #cfc4ad;
+  --silver-500: #a98f4f;
+  --silver-700: #8d7c5d;
+  --on-gold: #3a2c08;
+  --on-silver: #3f3629;
+  --glow-gold: #b8860b1f;
+  --glow-silver: #a98f4f14;
+  --grad-gold: linear-gradient(180deg, #f3dfa5, #d9b757);
+  --grad-silver: linear-gradient(180deg, #efe6d2, #cbb98f);
+  --grad-card: linear-gradient(180deg, #ffffff, #fffdf8);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 18px;
+  --shadow-raised: 0 6px 18px #b8860b14, 0 1px 0 #ffffff inset;
+  --shadow-well: inset 0 1px 3px #b8860b12;
+  --shadow-gold-button: 0 6px 16px #b8860b33;
+  --shadow-silver-button: 0 6px 16px #a98f4f2e;
+  --shadow-gold-glow: 0 0 12px #b8860b33;
+  --shadow-focus: 0 0 0 3px #b8860b2e, inset 0 1px 3px #b8860b12;
+}
+/* الخطوط موحّدة: Readex Pro لكل شي */
+:root {
+  --font-display: "Readex Pro", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --font-sans: "Readex Pro", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-mono: "Readex Pro", "Segoe UI", Tahoma, sans-serif;
+  --font-figure: "Readex Pro", "Segoe UI", Tahoma, sans-serif;
 }
 body { background-color: var(--surface-000); }
-/* شريط ذهبي أعلى الصفحة */
-body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 4px; z-index: 65;
-  background: linear-gradient(90deg, #3a2a0d, #f0cf7a 45%, #8a6a1f 60%, #f0cf7a); }
-html[dir="ltr"] body::before { background: linear-gradient(90deg, #f0cf7a, #8a6a1f 40%, #f0cf7a 55%, #3a2a0d); }
-.wrap { padding-top: 20px; }
-/* فاصل زخرفي */
-.gc-orn { text-align: center; color: #8a6a1f; font-size: 12px; line-height: 1.6; letter-spacing: .7em; padding-inline-start: .7em; margin: 2px 0 8px; }
-/* البراند */
-.brand { color: var(--gold-500); letter-spacing: .01em; }
-.brand .g { color: var(--gold-500); text-shadow: 0 0 20px #f0cf7a59; }
-.brand .s { color: var(--ink); }
-.hero h2 { color: var(--ink); text-shadow: 0 2px 18px #00000099; }
-/* بطاقات السعر: إطار ذهبي مزدوج */
-.gc-price { border: 1px solid var(--line-strong); border-radius: var(--radius-lg); background: var(--grad-card);
-  box-shadow: inset 0 0 26px #f0cf7a0f, 0 10px 30px #000000b3; }
-.gc-price::after { content: ""; position: absolute; inset: 4px; border: 1px solid #c8963c26; border-radius: 3px; pointer-events: none; }
-.gc-price .metal { color: var(--ink-muted); letter-spacing: .09em; }
-.gc-card, .gc-result { border: 1px solid var(--line); background: var(--grad-card); }
-.gc-card::after { content: ""; position: absolute; inset: 5px; border: 1px solid #c8963c1f; border-radius: 3px; pointer-events: none; }
-.gc-card { position: relative; overflow: hidden; }
-.gc-result::after { content: ""; position: absolute; inset: 5px; border: 1px solid #c8963c2e; border-radius: 3px; pointer-events: none; }
-.gc-result { border-color: var(--line-strong); }
-/* العناوين بخط الرقعة الداخلي */
-.gc-card h2, .gc-modal-title, .gc-geo-txt strong { color: var(--gold-500); font-weight: 700; }
-.gc-mark { background: var(--gold-500); box-shadow: 0 0 14px #f0cf7a80; }
-/* الأزرار والقوائم */
-.gc-btn.primary { color: var(--on-gold); }
-.gc-tab { border-color: var(--line); background: #100c07; color: var(--ink-muted); }
-.gc-tab:hover { background: #1a1309; color: var(--ink); }
-.gc-tab.active.gold { color: var(--on-gold); }
-.gc-tab.active.silver { color: var(--on-silver); }
-.gc-field input, .gc-field select { border-color: var(--line); background: var(--surface-well); color: var(--ink); }
-.gc-field > span { color: var(--ink-muted); }
-.gc-units { background: #0d0a06; border-color: var(--line); }
-.gc-unit.on { background: #1e1609; color: var(--gold-500); border-color: var(--line-strong); }
+body::before { display: none; }              /* بلا شريط علوي داكن */
+.gc-orn { display: none; }                   /* الزخرفة كانت بتصميم داكن */
+.wrap { padding-top: var(--space-4); }
+.gc { background: var(--surface-000); }
+
+/* الهيدر */
+.brand { color: #8a6a1f; letter-spacing: 0; }
+.brand .g { color: #8a6a1f; text-shadow: none; }
+.brand .s { color: #6b6152; }
+.hero h2 { color: #4a3f2e; text-shadow: none; }
+.gc-live { background: #f4ecdb; border-color: #e8dcc2; border-top-color: #e8dcc2; color: #7d6b4a; box-shadow: none; }
+.gc-live.ok .gc-dot { box-shadow: 0 0 8px #4ade8059; }
+.gc-cd { color: #a99c85; }
+.gc-live.ok .gc-cd { color: #a97a12; }
+.lang-btn { background: linear-gradient(180deg, #c99a1a, #a97a12); color: #fff; border-color: #a97a12; box-shadow: 0 4px 12px #b8860b2e; }
+.lang-btn:hover { color: #fff; border-color: #8a6a1f; }
+
+/* بطاقات السعر */
+.gc-price { background: #fff; border-color: #e8dcc2; border-top-color: #e8dcc2; box-shadow: 0 6px 18px #b8860b14; }
+.gc-price::before { background: linear-gradient(90deg, transparent, #d9b757, transparent); }
+.gc-price .metal { color: #8d7c5d; }
+.gc-price .val { color: #a97a12; text-shadow: none; }
+.gc-price.silver .val { color: #8d7c5d; }
+.gc-price .t, .gc-trend span { color: #8d7c5d; }
+.gc-spark-line { stroke: #c9a227; }
+.gc-spark-area { fill: #b8860b1f; }
+.gc-price.silver .gc-spark-line { stroke: #cbb98f; }
+.gc-more { color: #a99c85; }
+
+/* الكارت والنتيجة */
+.gc-card, .gc-result { background: #fff; border-color: #e8dcc2; box-shadow: 0 8px 22px #b8860b12; }
+.gc-card::after, .gc-result::after { display: none; }
+.gc-result { border-top-color: #d9b757; }
+.gc-result .total { color: #a97a12; text-shadow: none; }
+.gc-result .line { border-top-color: #eadfc6; }
+.gc-result .line .lbl { color: #8d7c5d; }
+.gc-result .line .val { color: #3b3227; }
+.gc-card h2, .gc-modal-title, .gc-geo-txt strong { color: #8a6a1f; }
+.gc-mark { background: #b8860b; box-shadow: none; }
+
+/* التبويبات + الحقول */
+.gc-tab { background: #f6f0e4; border-color: #e5d9bf; color: #8d7c5d; box-shadow: none; }
+.gc-tab:hover { background: #f1e8d6; color: #3b3227; }
+.gc-tab.active.gold { color: #3a2c08; border-color: #b8860b; }
+.gc-tab.active.silver { color: #3f3629; border-color: #a98f4f; }
+.gc-field > span { color: #8d7c5d; }
+.gc-field input, .gc-field select { background: #fbf7ee; border-color: #e5d9bf; color: #3b3227; }
+.gc-field select option { background: #fff; color: #3b3227; }
+.gc-field .hint { color: #a99c85; }
+.gc-units { background: #f4ecdb; border-color: #e5d9bf; }
+.gc-unit { color: #8d7c5d; }
+.gc-unit.on { background: #fff; color: #a97a12; border-color: #e5d9bf; box-shadow: 0 1px 3px #b8860b26; }
+
 /* شريط الحكم */
-.gc-verdict { background: #0e0a06; border: 1px solid var(--line); border-inline-start: 3px solid var(--gold-500); border-radius: 4px; }
-.gc-verdict b { color: var(--gold-300); }
+.gc-verdict { background: #f7f1e5; border-color: #eadfc6; border-inline-start: 3px solid #b8860b; }
+.gc-verdict.good .chip, .gc-verdict.warn .chip, .gc-verdict.bad .chip { color: #fff; }
+.gc-result .line.good .val { color: #15803d; }
+.gc-result .line.warn .val { color: #b45309; }
+.gc-result .line.bad .val { color: #b91c1c; }
+.gc-verdict p { color: #5c5343; }
+.gc-verdict b { color: #8a6a1f; }
+
 /* نافذة المؤشر */
-.gc-modal-card { border: 1px solid var(--line-strong); background: var(--grad-card); }
-.gc-chip { background: #100c07; border-color: var(--line); }
-.gc-chip.on { background: #1e1609; color: var(--gold-500); border-color: var(--line-strong); }
-.gc-chart-wrap { background: var(--surface-well); border-color: var(--line); }
-.gc-combo-btn, .gc-combo-panel { border-color: var(--line); }
-.gc-combo-item:hover, .gc-combo-item.active { background: #1a1309; }
-.gc-combo-item.sel { box-shadow: inset 0 0 0 1px var(--line-strong); }
-.gc-combo-panel { background: #100c07; }
-/* شريط تحديد الموقع */
-.gc-geo { background: #0f0b06; border-top: 1px solid var(--line-strong); box-shadow: 0 -10px 30px #000000b3; }
-.gc-toast { background: #1b1309; border-color: var(--line-strong); }
-footer { border-top: 1px solid var(--line); }
+.gc-modal-bg { background: #3b32274d; }
+.gc-modal-card { background: #fffdf8; border-color: #e8dcc2; box-shadow: 0 -10px 40px #b8860b1f; }
+.gc-modal-x { background: #fff; border-color: #e8dcc2; color: #8d7c5d; }
+.gc-modal-price .big { color: #a97a12; }
+.gc-chip { background: #f6f0e4; border-color: #e5d9bf; color: #8d7c5d; }
+.gc-chip.on { background: #fff; color: #a97a12; border-color: #d9b757; }
+.gc-chart-wrap { background: #fbf7ee; border-color: #e8dcc2; }
+.gc-grid { stroke: #e8dcc2; }
+.gc-line { stroke: #b8860b; }
+.gc-area { fill: #b8860b1f; }
+.gc-ylab, .gc-xlab { fill: #a99c85; }
+.gc-cursor { stroke: #a99c85; }
+.gc-dot { fill: #b8860b; stroke: #fff; }
+.gc-tip { background: #fff; border-color: #e8dcc2; color: #3b3227; }
+.gc-chart-stats { color: #8d7c5d; }
+.gc-chart-stats b { color: #3b3227; }
+.gc-chart-note { color: #a99c85; }
 
+/* قائمة الدول */
+.gc-combo-btn { background: #fbf7ee; border-color: #e5d9bf; color: #3b3227; box-shadow: var(--shadow-well); }
+.gc-combo-panel { background: #fff; border-color: #e8dcc2; box-shadow: 0 12px 30px #b8860b1f; }
+.gc-combo-search input { background: #fbf7ee; border-color: #e5d9bf; color: #3b3227; }
+.gc-combo-item { color: #3b3227; }
+.gc-combo-item:hover, .gc-combo-item.active { background: #f6f0e4; }
+.gc-combo-item.sel { box-shadow: inset 0 0 0 1px #d9b757; }
+.gc-combo-empty { color: #a99c85; }
+.gc-cur { color: #a99c85; }
+.gc-combo-geo { box-shadow: inset 0 0 0 1px #eadfc6; }
 
-/* أرقام الأسطر والتفاصيل بخط Amiri */
-.gc .gc-result .line .val { font-family: var(--font-figure); font-size: 16px; font-weight: 700; letter-spacing: .01em; }
-.gc .gc-trend b { font-family: var(--font-figure); font-size: 14px; }
-.gc .gc-chg { font-family: var(--font-figure); font-size: 16px; }
-.gc .gc-chart-stats b { font-family: var(--font-figure); font-size: 15px; font-weight: 700; }
-.gc .gc-tip { font-family: var(--font-figure); font-size: 13px; }
+/* شريط الموقع + التوست + الفوتر */
+.gc-geo { background: #fffdf8; border-top: 1px solid #e8dcc2; box-shadow: 0 -8px 24px #b8860b14; }
+.gc-geo-txt span { color: #8d7c5d; }
+.gc-btn.secondary { background: #fff; border-color: #e8dcc2; color: #3b3227; box-shadow: none; }
+.gc-btn.ghost { color: #8a6a1f; border-color: #d9b757; }
+.gc-toast { background: #fffdf8; border-color: #e8dcc2; color: #3b3227; box-shadow: 0 10px 28px #b8860b1f; }
+footer { border-top-color: #e8dcc2; color: #8d7c5d; }
+footer a { color: #a97a12; }
+footer .tg-link { background: #fff; border-color: #e8dcc2; color: #3b3227; }
+footer .tg-link:hover { border-color: #b8860b; color: #6b5119; }
+.gc-handle { color: #8d7c5d; }
+.gc-visits { color: #a99c85; }
+.gc-visits b { color: #a97a12; }
+.gc-seo { color: #8d7c5d; }
+.gc-seo b { color: #a97a12; }
 
 </style>
 </head>
